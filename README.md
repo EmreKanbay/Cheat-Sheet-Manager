@@ -20,10 +20,29 @@ https://github.com/user-attachments/assets/c1e4bbee-c1e3-4bdd-87fc-94421b58f19d
 
 ## How to Start:
 
-1. clone this repository `git clone https://github.com/EmreKanbay/Open-Source-Starter-Kit.git`
-2. Change directroy into the folder `cd Open-Source-Starter-Kit`
-3. Initialize the code `npm i`
-4. Start the app `node ./src`
+
+1. clone this repository 
+
+```bash
+git clone https://github.com/EmreKanbay/Open-Source-Starter-Kit.git
+```
+2. Change directroy into the folder 
+
+```bash
+cd Open-Source-Starter-Kit
+```
+3. Initialize the code 
+
+```bash 
+npm i
+```
+
+4. Start the app 
+
+```
+node ./src
+```
+
 5. You can find app in `http://localhost:3000`
 6. Enter your connection string, video above shows hot to get that string. [You can get it here](https://console.neon.tech)
 7. Set your username and password
