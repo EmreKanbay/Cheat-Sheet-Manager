@@ -94,7 +94,7 @@ module.exports = {
 								<ul class="u-list">
 									<li
 										onclick="ChangeContent('PageHome')"
-										class="c-menu__item is-active"
+										class="c-menu__item is-active homePage"
 										data-toggle="tooltip"
 										title="Modules">
 										<div class="c-menu__item__inner">
@@ -108,7 +108,7 @@ module.exports = {
 
 									<li
 										onclick="ChangeContent('PageProjects')"
-										class="c-menu__item "
+										class="c-menu__item  projectPage"
 										data-toggle="tooltip"
 										title="Flights">
 										<div class="c-menu__item__inner">
@@ -745,8 +745,7 @@ const ChangeToDocs = (t) => {
 		};
 		
 		const menuChangeActive = (el) => {
- 		const hasSubmenu = el.classList.contains("has-submenu");
-		
+ 		
 		document.querySelector(".c-menu .is-active")?.classList.remove("is-active");
 		
 		

@@ -323,7 +323,7 @@ module.exports = {
 
 		<div class="container-list-container-for-element">
 			<div
-				onclick="ChangeContent('PageProjects', ()=>{document.querySelector('#web-dev').scrollIntoView()})"
+				onclick="ChangeContent('PageProjects', ()=>{document.querySelector('#web-dev').scrollIntoView()});document.querySelector('.homePage').classList.remove('is-active');document.querySelector('.projectPage').classList.add('is-active')"
 				class="list-container-for-element">
 				<img
 					class="list-container-for-element-image"
@@ -334,7 +334,7 @@ module.exports = {
 			</div>
 
 			<div
-				onclick="ChangeContent('PageProjects', ()=>{document.querySelector('#mobile-dev').scrollIntoView()})"
+				onclick="ChangeContent('PageProjects', ()=>{document.querySelector('#mobile-dev').scrollIntoView()});document.querySelector('.homePage').classList.remove('is-active');document.querySelector('.projectPage').classList.add('is-active')"
 				class="list-container-for-element">
 				<img
 					class="list-container-for-element-image"
@@ -345,7 +345,7 @@ module.exports = {
 			</div>
 
 			<div
-				onclick="ChangeContent('PageProjects', ()=>{document.querySelector('#api-dev').scrollIntoView()})"
+				onclick="ChangeContent('PageProjects', ()=>{document.querySelector('#api-dev').scrollIntoView()});document.querySelector('.homePage').classList.remove('is-active');document.querySelector('.projectPage').classList.add('is-active')"
 				class="list-container-for-element">
 				<img
 					class="list-container-for-element-image"
