@@ -39,7 +39,7 @@ npm i
 
 4. Start the app 
 
-```
+```bash
 node ./src
 ```
 
