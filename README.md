@@ -14,8 +14,9 @@
 
 ## How to initialize app
 
+https://github.com/user-attachments/assets/c1e4bbee-c1e3-4bdd-87fc-94421b58f19d
 
- 
+
 
 ## How to Start:
 
