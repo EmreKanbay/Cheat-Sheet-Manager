@@ -32,14 +32,6 @@ const js = async (x, ...values) => {
 	return rendered;
 };
 
-
-
-	
-
-
-
-
-
 module.exports = {
 	html: (script, clientData) => html`
 		<dialog
@@ -48,8 +40,7 @@ module.exports = {
 			<h3 class="HZjHbp-dialog-title">Neon Database</h3>
 			<form class="HZjHbp-form">
 				<p class="HZjHbp-form-detail">${clientData}</p>
-
- 			</form>
+			</form>
 		</dialog>
 
 		${() => {
@@ -180,5 +171,5 @@ module.exports = {
 			}
 		</style>
 	`,
-	js: clientData => js``}
-
+	js: clientData => js``,
+};

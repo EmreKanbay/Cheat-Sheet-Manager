@@ -32,19 +32,6 @@ const js = async (x, ...values) => {
 	return rendered;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = {
 	html: (script, clientData) => html`
 		<dialog
@@ -74,7 +61,6 @@ module.exports = {
 
 				<div class="ku3uKC-loading loading-inline"></div>
 				<div class="ku3uKC-login-error"></div>
-
 			</form>
 		</dialog>
 

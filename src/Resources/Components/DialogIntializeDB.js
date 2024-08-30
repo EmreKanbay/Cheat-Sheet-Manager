@@ -45,12 +45,9 @@ module.exports = {
 					type="submit"
 					value="Initialize Neon Database" />
 
-
 				<div class="HZjHbp-login-error"></div>
 
 				<div class="HZjHbp-loading loading-inline"></div>
-
-  
 			</form>
 		</dialog>
 

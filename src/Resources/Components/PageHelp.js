@@ -5,8 +5,6 @@ const md = markdownit();
 const fs = require("fs");
 const path = require("path");
 
-
-
 const html = async (x, ...values) => {
 	var rendered = "";
 	for (let u = 0; u < x.length; u++) {
@@ -41,9 +39,6 @@ const js = async (x, ...values) => {
 
 var message;
 
-	
-
-
 // ${()=> {return typeof script == "string" ? `<script>${script}</script>` : ""}}
 
 module.exports = {
@@ -52,15 +47,18 @@ module.exports = {
 			return typeof script == "string" ? `<script>${script}</script>` : "";
 		}}
 		${async () => {
- 
 			try {
-				const res = await fetch("https://raw.githubusercontent.com/EmreKanbay/Open-Source-Starter-Kit/master/README.md", {
-					  method: "GET",
-				})
-		
-				return await md.render(await res.text())
- 			} catch {	console.log("e")}
-			
+				const res = await fetch(
+					"https://raw.githubusercontent.com/EmreKanbay/Open-Source-Starter-Kit/master/README.md",
+					{
+						method: "GET",
+					},
+				);
+
+				return await md.render(await res.text());
+			} catch {
+				console.log("e");
+			}
 		}}
 	`,
 	js: clientData => js`

@@ -32,14 +32,6 @@ const js = async (x, ...values) => {
 	return rendered;
 };
 
-
-
-	
-
-
-
-
-
 module.exports = {
 	html: (script, clientData) => html`
 		<dialog
@@ -67,9 +59,8 @@ module.exports = {
 
 				<div class="HZjHbp-login-error"></div>
 
-				<div class="HZjHbp-loading loading-inline"></div> 
-
- 			</form>
+				<div class="HZjHbp-loading loading-inline"></div>
+			</form>
 		</dialog>
 
 		${() => {
@@ -239,5 +230,5 @@ document.querySelector(".HZjHbp-form").addEventListener("submit",async (e) => {
 				})
 					
  
-`}
-
+`,
+};

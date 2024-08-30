@@ -114,7 +114,7 @@ module.exports = {
 		DialogConfig,
 		DialogRegister,
 		DialogIntializeDB,
-		DialogAlert
+		DialogAlert,
 	},
 	private: {
 		PageHome,

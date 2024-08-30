@@ -4,7 +4,6 @@
 
 ![](./src/Assets/presentation.gif)
 
-
 NOTE: All the cheat sheets on this app is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
 
 Dashboard design is from this codepen https://codepen.io/jaca90/pen/vZJZMx
@@ -34,44 +33,41 @@ Android SDK
 
 Laravel, Django, .Net, Ruby on Rails, Spring, Flask, Express JS, Phoneix
 
-
 ## How to initialize database
 
 https://github.com/user-attachments/assets/c1e4bbee-c1e3-4bdd-87fc-94421b58f19d
 
-
-
 ## How to Start:
 
-
-1. clone this repository 
+1. clone this repository
 
 ```bash
 git clone https://github.com/EmreKanbay/Open-Source-Starter-Kit.git
 ```
-2. Change directroy into the folder 
+
+2. Change directroy into the folder
 
 ```bash
 cd Open-Source-Starter-Kit
 ```
-3. Initialize the code 
 
-```bash 
+3. Initialize the code
+
+```bash
 npm i
 ```
 
-4. Start the app 
+4. Start the app
 
 ```bash
 node ./src
 ```
+
 Warning: **do not use nodemon**, it will throw network error.
 
 5. You can find app in `http://localhost:3000`
 6. Enter your connection string, video above shows hot to get that string. [You can get it here](https://console.neon.tech)
 7. Set your username and password
-
-
 
 ### Missing Features
 
@@ -87,9 +83,6 @@ Backend: Node JS - Express JS
 
 Database: Postgres
 
-
 ### TODO
 
 - Settings page is not functional yet
-
- 

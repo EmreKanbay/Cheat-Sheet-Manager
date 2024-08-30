@@ -6,210 +6,156 @@ const path = require("path");
 const database = Index.express.Router();
 
 database.post("/initialize", Index.express.json(), async (req, res) => {
+	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
 
- 	
-		var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
-		
-		data = JSON.parse(data)
-	
-	 if(data.initialized == true){
-		res.status(401).send(await Components.public.ErrorBox.html({message: "Already Initialized"}));
+	data = JSON.parse(data);
 
-	}else{
-		const client = new Index.Client({ connectionString: data.PG_CONNECTION_STRING });	
+	if (data.initialized == true) {
+		res.status(401).send(await Components.public.ErrorBox.html({ message: "Already Initialized" }));
+	} else {
+		const client = new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
 		client
-		.connect()
-		.then(async e => {
-
-
+			.connect()
+			.then(async e => {
 				try {
-
-					await client.query(`DROP TABLE IF EXISTS "ossk_users"`)
-					await client.query(`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `)
+					await client.query(`DROP TABLE IF EXISTS "ossk_users"`);
+					await client.query(
+						`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `,
+					);
 					data.initialized = true;
 
 					await fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"), JSON.stringify(data));
 					res.status(200).send();
-					await client.end()
-					return
+					await client.end();
+					return;
 				} catch (error) {
-					console.log(error)
-					
-					res.status(501).send(await Components.public.ErrorBox.html({message: "Initialization Failed"}));
-					await client.end()
- 				
+					console.log(error);
+
+					res.status(501).send(await Components.public.ErrorBox.html({ message: "Initialization Failed" }));
+					await client.end();
 				}
-			
-		})
-		.catch(async e => {
-			 await client.end();
-			 res.status(400).send(await Components.public.ErrorBox.html({message: "Connection Failed"}));
-		});
-	}
-
-
-
-
-})
-
-
-database.post("/connect", Index.express.json(), async (req, res) => {
-	try {
-	
-			var data =  fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
-			
-			data = JSON.parse(data)
- 
- 
-			const client = new Index.Client({ connectionString: req.body.db_string });	
-			client
-			.connect()
-			.then(async e => {
- 
-
-					try {
-						
-
-						await client.query(`DROP TABLE IF EXISTS "ossk_users"`)
-						await client.query(`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `)
-
-						data.PG_CONNECTION_STRING = req.body.db_string;
-						data.initialized = true;
-						
-						await fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"),await JSON.stringify(data));
-						
-						res.status(200).send();
-						
-						await client.end()
-						return
-					} catch (error) {
-						console.log(error)
-						
-						res.status(501).send(await Components.public.ErrorBox.html({message: "Initialization Failed"}));
-						
-						await client.end();
-						return
-					}
-				
 			})
 			.catch(async e => {
- 				await client.end();
- 				res.status(400).send(await Components.public.ErrorBox.html({message: "Connection Failed"}));
+				await client.end();
+				res.status(400).send(await Components.public.ErrorBox.html({ message: "Connection Failed" }));
 			});
- 
-
-
-
-
-	} catch (error) {
-		console.log("error");
-		res.status(500).send(await Components.public.ErrorBox.html({message: "Internal Server Error"}));
-		await client.end();
-
 	}
 });
 
+database.post("/connect", Index.express.json(), async (req, res) => {
+	try {
+		var data = fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+
+		data = JSON.parse(data);
+
+		const client = new Index.Client({ connectionString: req.body.db_string });
+		client
+			.connect()
+			.then(async e => {
+				try {
+					await client.query(`DROP TABLE IF EXISTS "ossk_users"`);
+					await client.query(
+						`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `,
+					);
+
+					data.PG_CONNECTION_STRING = req.body.db_string;
+					data.initialized = true;
+
+					await fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"), await JSON.stringify(data));
+
+					res.status(200).send();
+
+					await client.end();
+					return;
+				} catch (error) {
+					console.log(error);
+
+					res.status(501).send(await Components.public.ErrorBox.html({ message: "Initialization Failed" }));
+
+					await client.end();
+					return;
+				}
+			})
+			.catch(async e => {
+				await client.end();
+				res.status(400).send(await Components.public.ErrorBox.html({ message: "Connection Failed" }));
+			});
+	} catch (error) {
+		console.log("error");
+		res.status(500).send(await Components.public.ErrorBox.html({ message: "Internal Server Error" }));
+		await client.end();
+	}
+});
 
 database.post("/register", Index.upload.none(), async (req, res, next) => {
 	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
 	data = JSON.parse(data);
 
+	const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
 
+	try {
+		await client.connect();
 
-		const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
+		await client.query(
+			`INSERT INTO "ossk_users" (login_name, password_hash) VALUES ('${req?.body.login_name}','${Index.sha256(req?.body.login_password)}')`,
+		);
 
-		try{
+		res.cookie("login_name", req.body.login_name, { expires: new Date(Date.now() + 900000), httpOnly: true });
+		res.cookie("password_hash", Index.sha256(req?.body.login_password), {
+			expires: new Date(Date.now() + 900000),
+			httpOnly: true,
+		});
 
-			await client.connect();
+		res.status(200).send();
 
-			await client.query(
-				`INSERT INTO "ossk_users" (login_name, password_hash) VALUES ('${req?.body.login_name}','${Index.sha256(req?.body.login_password)}')`,
-			);
-	
-			res.cookie("login_name", req.body.login_name, { expires: new Date(Date.now() + 900000), httpOnly: true });
-			res.cookie("password_hash", Index.sha256(req?.body.login_password), {
-				expires: new Date(Date.now() + 900000),
-				httpOnly: true,
-			});
-	
-			res.status(200).send();
-	
-			await client.end();
+		await client.end();
+	} catch (e) {
+		console.log(e);
 
-		}
-		catch(e){
-			console.log(e)
-
-			res.status(400).send(await Components.public.ErrorBox.html({message: "Registration Failed"}))
-			await client.end();
-
-		}
-
-	
+		res.status(400).send(await Components.public.ErrorBox.html({ message: "Registration Failed" }));
+		await client.end();
+	}
 });
 
-
-
 database.post("/login", Index.upload.none(), async (req, res) => {
-
 	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
 
-	data = await JSON.parse(data)
-
+	data = await JSON.parse(data);
 
 	const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
 
 	await client.connect();
-		const record = await client.query(
-			`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.body["login_name"]}'`,
-		);
+	const record = await client.query(
+		`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.body["login_name"]}'`,
+	);
 
+	if (record.rowCount == 0) {
+		res.status(404).send(await Components.public.ErrorBox.html({ message: "User Not Found" }));
+		await client.end();
+		return;
+	} else if (record.rowCount == 1) {
+		if (record.rows[0]["password_hash"] == Index.sha256(req.body["login_password"])) {
+			res.cookie("login_name", record.rows[0]["login_name"]);
+			res.cookie("password_hash", record.rows[0]["password_hash"]);
+			res.send();
 
-		if (record.rowCount == 0) {
-			res.status(404).send(await Components.public.ErrorBox.html({message: "User Not Found"}))
-		await client.end()
-			return		
+			await client.end();
+
+			return;
+		} else {
+			res.status(404).send(await Components.public.ErrorBox.html({ message: "Password Is Incorrect" }));
+
+			await client.end();
+			return;
 		}
-
-
-
-		else if (record.rowCount == 1) {
-
-			if (record.rows[0]["password_hash"] == Index.sha256(req.body["login_password"])) {
-				res.cookie("login_name", record.rows[0]["login_name"]);
-				res.cookie("password_hash", record.rows[0]["password_hash"]);
-				res.send();
-
-		await client.end()
-
-		return
-			} else {
-			res.status(404).send(await Components.public.ErrorBox.html({message: "Password Is Incorrect"}))
-		
-		await client.end()
-				return
-		}
-			} else {
-			res.status(404).send(await Components.public.ErrorBox.html({message: "Multiple users has found, thats a problem"}))
-		await client.end()
-				return
-	
-		}
-  
-
-
-
-
+	} else {
+		res
+			.status(404)
+			.send(await Components.public.ErrorBox.html({ message: "Multiple users has found, thats a problem" }));
+		await client.end();
+		return;
+	}
 });
-
-
-
-
-
-
-
-
-
 
 // database.post("/", Index.express.json(), async (req, res) => {
 // 	var record;
