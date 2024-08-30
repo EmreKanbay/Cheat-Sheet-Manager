@@ -32,6 +32,19 @@ const js = async (x, ...values) => {
 	return rendered;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
 	html: (script, clientData) => html`
 		<dialog
@@ -62,7 +75,6 @@ module.exports = {
 				<div class="ku3uKC-loading loading-inline"></div>
 				<div class="ku3uKC-login-error"></div>
 
-				<p class="ku3uKC-login-registered">Click to enter admin panel</p>
 			</form>
 		</dialog>
 
@@ -151,170 +163,120 @@ module.exports = {
 
 
 
+	document.querySelector(".ku3uKC-form").addEventListener("submit", async e => {
+		e.preventDefault();
+	
+	
+	
+	
+	document.querySelector(".ku3uKC-loading").classList.add("active");
+	document.querySelector(".ku3uKC-login-error").innerHTML = "";
+	
+	
+	
+	if( document.querySelector(".ku3uKC-password-input").value == document.querySelector(".ku3uKC-password-input-verify").value){
+	
+	if(document.querySelector(".ku3uKC-username-input").value != ""){
+	
+	if( document.querySelector(".ku3uKC-password-input").value != ""){
+	
+	
+	const formData = new FormData();
+	formData.append("login_name", document.querySelector(".ku3uKC-username-input").value);
+	formData.append("login_password", document.querySelector(".ku3uKC-password-input").value);
+	
+	
+	try {
+	
+	const res = await fetch("/database/register", {
+	body: formData,
+	method: "POST",
+	});
+	
+ 	if (res.ok){
+	
+	
+	window.location.href = "/"
+	
+	} else if(!res.ok){
+	
+		document.querySelector(".ku3uKC-loading").classList.remove("active");
+		document.querySelector(".ku3uKC-login-error").innerHTML = await res.text();
+		
+	
+	}
+	
+	
+	
+	
+	} catch (error) {
+	 console.log(error)
+	document.querySelector(".ku3uKC-loading").classList.remove("active");
+	document.querySelector(".ku3uKC-login-error").innerHTML = "<h1>Network Error</h1>";
+	}
+	
+	
+	}else{
+	
+	
+	try {
+	fetch("/get-component/public/ErrorBox", {
+	method: "POST",
+	body: JSON.stringify({ message: "Passwords cant be empty" }),
+	headers: {"Content-Type":"application/json"}
+	})
+	.then(e => e.json())
+	.then(e => {
+	document.querySelector(".ku3uKC-loading").classList.remove("active");
+	document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
+	});
+	} catch {}
+	
+	
+	}
+	
+	
+	
+	
+	
+	}else{
+	
+	try {
+	fetch("/get-component/public/ErrorBox", {
+	method: "POST",
+	body: JSON.stringify({ message: "Username cant be empty" }),
+	headers: {"Content-Type":"application/json"}
+	})
+	.then(e => e.json())
+	.then(e => {
+	document.querySelector(".ku3uKC-loading").classList.remove("active");
+	document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
+	});
+	} catch {}
+	
+	}
+	}else{
+	try {
+	fetch("/get-component/public/ErrorBox", {
+	method: "POST",
+	body: JSON.stringify({ message: "Passwords does not match" }),
+	headers: {"Content-Type":"application/json"}
+	})
+	.then(e => e.json())
+	.then(e => {
+	document.querySelector(".ku3uKC-loading").classList.remove("active");
+	document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
+	});
+	} catch {}
+	
+	}
+	
+	
+		 
+	
+	});
+	
 
-
-
-document.querySelector(".ku3uKC-login-registered").addEventListener("click", async e => {
-    
-    
-document.querySelector(".ku3uKC-dialog").previousElementSibling.remove()
-document.querySelector(".ku3uKC-dialog").nextElementSibling.remove()
-document.querySelector(".ku3uKC-dialog").remove()
-
-
-    })
-
-
-
-
-
-document.querySelector(".ku3uKC-form").addEventListener("submit", async e => {
-					e.preventDefault();
-
- 
-
-
- document.querySelector(".ku3uKC-login-registered").style.display = "none"
-
-document.querySelector(".ku3uKC-loading").classList.add("active");
-                    document.querySelector(".ku3uKC-login-error").innerHTML = "";
-
-if( document.querySelector(".ku3uKC-password-input").value == document.querySelector(".ku3uKC-password-input-verify").value){
-
-if(document.querySelector(".ku3uKC-username-input").value != ""){
-
-if( document.querySelector(".ku3uKC-password-input").value != ""){
-
-
-const formData = new FormData();
-formData.append("login_name", document.querySelector(".ku3uKC-username-input").value);
-formData.append("login_password", document.querySelector(".ku3uKC-password-input").value);
-
-
-try {
-
-    const res = await fetch("/database/register", {
-        body: formData,
-        method: "POST",
-    });
-
- if (res.ok){
-
- try {
-            fetch("/get-component/public/SuccessBox", {
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: "Registered Succesfully" }),
-                method: "POST",
-            })
-                .then(e => e.json())
-                .then(e => {
-                    document.querySelector(".ku3uKC-loading").classList.remove("active");
-                    document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
-                });
-        } catch {}
-
-
-document.querySelector(".ku3uKC-loading").classList.remove("active");
-document.querySelector(".ku3uKC-login-error").innerHTML = "";
- document.querySelector(".ku3uKC-login-registered").style.display = "block"
-
-
- }
- else if(res.status == 401){
- 
-         try {
-            fetch("/get-component/public/ErrorBox", {
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: "Already Registered" }),
-                method: "POST",
-            })
-                .then(e => e.json())
-                .then(e => {
-                    document.querySelector(".ku3uKC-loading").classList.remove("active");
-                    document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
-                });
-        } catch {}
-
-
- }
- else {
-        try {
-            fetch("/get-component/public/ErrorBox", {
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: "Unknown Error" }),
-                method: "POST",
-            })
-                .then(e => e.json())
-                .then(e => {
-                    document.querySelector(".ku3uKC-loading").classList.remove("active");
-                    document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
-                });
-        } catch {}
-     }
-} catch (error) {
-    document.querySelector(".ku3uKC-loading").classList.remove("active");
-    document.querySelector(".ku3uKC-login-error").innerHTML = \` <h1>Network Error</h1>\`;
-}
-
-
-}else{
-
-
-try {
-    fetch("/get-component/public/ErrorBox", {
-        method: "POST",
-        body: JSON.stringify({ message: "Passwords cant be empty" }),
-        headers: {"Content-Type":"application/json"}
-    })
-        .then(e => e.json())
-        .then(e => {
-            document.querySelector(".ku3uKC-loading").classList.remove("active");
-            document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
-        });
-} catch {}
-
-
-}
-
-
-
-
-
-}else{
-
-try {
-    fetch("/get-component/public/ErrorBox", {
-        method: "POST",
-        body: JSON.stringify({ message: "Username cant be empty" }),
-        headers: {"Content-Type":"application/json"}
-    })
-        .then(e => e.json())
-        .then(e => {
-            document.querySelector(".ku3uKC-loading").classList.remove("active");
-            document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
-        });
-} catch {}
-
-}
-}else{
-try {
-    fetch("/get-component/public/ErrorBox", {
-        method: "POST",
-        body: JSON.stringify({ message: "Passwords does not match" }),
-        headers: {"Content-Type":"application/json"}
-    })
-        .then(e => e.json())
-        .then(e => {
-            document.querySelector(".ku3uKC-loading").classList.remove("active");
-            document.querySelector(".ku3uKC-login-error").innerHTML = e.html;
-        });
-} catch {}
- 
-}
-
-
- 					
-				
-				});
+	
 `,
 };

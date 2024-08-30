@@ -49,25 +49,6 @@ module.exports = {
 			<form class="HZjHbp-form">
 				<p class="HZjHbp-form-detail">${clientData}</p>
 
-				<p class="HZjHbp-form-string">Conenction String</p>
-				<input
-					placeholder="postgresql://user:password@host/database"
-					class="HZjHbp-neon-string-input"
-					type="password" />
-				<a
-					class="HZjHbp-dialog-how-to-video"
-					href="">
-					how to get connection string for free under 3 minutes
-				</a>
-
-				<input
-					type="submit"
-					value="Connect Neon Database" />
-
-				<div class="HZjHbp-login-error"></div>
-
-				<div class="HZjHbp-loading loading-inline"></div> 
-
  			</form>
 		</dialog>
 
@@ -199,44 +180,5 @@ module.exports = {
 			}
 		</style>
 	`,
-	js: clientData => js`
-
-
-document.querySelector(".HZjHbp-form").addEventListener("submit",async (e) => {
-	e.preventDefault()
-
-
-
-						try {
-
-						document.querySelector(".HZjHbp-loading").classList.add("active");
-						document.querySelector(".HZjHbp-login-error").innerHTML = "";
-
-						const res = await fetch("/database/connect", {
-							body: JSON.stringify({ db_string: document.querySelector(".HZjHbp-neon-string-input").value }),
-							headers: {"Content-Type":"application/json"},
-							method: "POST",
-						});
-
-						if (!res.ok) {
-							try {
- 										document.querySelector(".HZjHbp-loading").classList.remove("active");
-										document.querySelector(".HZjHbp-login-error").innerHTML = await res.text();
-				
-							} catch {}
-						}else if (res.ok) {
- 
- 						 window.location.href = "/"
-
-						}
-
-						
-					} catch (error) {
-						document.querySelector(".HZjHbp-loading").classList.remove("active");
-						document.querySelector(".HZjHbp-login-error").innerHTML = " <h1>Error</h1> ";
-					}
-				})
-					
- 
-`}
+	js: clientData => js``}
 

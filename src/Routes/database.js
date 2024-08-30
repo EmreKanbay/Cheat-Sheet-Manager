@@ -6,81 +6,207 @@ const path = require("path");
 
 const database = Index.express.Router();
 
+database.post("/initialize", Index.express.json(), async (req, res) => {
+
+ 	
+		var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+		
+		data = JSON.parse(data)
+	
+	 if(data.initialized == true){
+		res.status(401).send(await Components.public.ErrorBox.html({message: "Already Initialized"}));
+
+	}else{
+		const client = new Index.Client({ connectionString: data.PG_CONNECTION_STRING });	
+		client
+		.connect()
+		.then(async e => {
+
+
+				try {
+
+					await client.query(`DROP TABLE IF EXISTS "ossk_users"`)
+					await client.query(`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `)
+					data.initialized = true;
+
+					await fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"), JSON.stringify(data));
+					res.status(200).send();
+					await client.end()
+					return
+				} catch (error) {
+					console.log(error)
+					
+					res.status(501).send(await Components.public.ErrorBox.html({message: "Initialization Failed"}));
+					await client.end()
+ 				
+				}
+			
+		})
+		.catch(async e => {
+			 await client.end();
+			 res.status(400).send(await Components.public.ErrorBox.html({message: "Connection Failed"}));
+		});
+	}
+
+
+
+
+})
+
+
 database.post("/connect", Index.express.json(), async (req, res) => {
 	try {
-		var data = fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
-
-		data = JSON.parse(data);
-		data.PG_CONNECTION_STRING = req.body.db_string;
-
-		fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"), JSON.stringify(data));
-
-		const client = new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
-
-		client
+	
+			var data =  fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+			
+			data = JSON.parse(data)
+ 
+ 
+			const client = new Index.Client({ connectionString: req.body.db_string });	
+			client
 			.connect()
 			.then(async e => {
-				console.log("client connected");
-				if (data?.initialized) {
-					res.status(204).send();
-				} else {
-					try {
-						var t = await client.query(
-							`CREATE TABLE IF NOT EXISTS "users" (id SERIAL PRIMARY KEY,login_name text, password_hash text)`,
-						);
+ 
 
+					try {
+						data.PG_CONNECTION_STRING = req.body.db_string;
 						data.initialized = true;
 
-						fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"), JSON.stringify(data));
-						res.status(202).send();
+						await client.query(`DROP TABLE IF EXISTS "ossk_users"`)
+						await client.query(`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `)
+
+						await fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"),await JSON.stringify(data));
+						
+						res.status(200).send();
+						
+						return
 					} catch (error) {
-						console.log(error);
-						res.status(501).send();
+						console.log(error)
+						
+						res.status(501).send(await Components.public.ErrorBox.html({message: "Initialization Failed"}));
 					}
-				}
+				
 				await client.end();
 			})
 			.catch(async e => {
-				console.log("client not  connected");
-				await client.end();
-				res.status(400).send();
+ 				await client.end();
+ 				res.status(400).send(await Components.public.ErrorBox.html({message: "Connection Failed"}));
 			});
+ 
+
+
+
+
 	} catch (error) {
-		console.log(error);
-		res.status(500).send();
+		console.log("error");
+		res.status(500).send(await Components.public.ErrorBox.html({message: "Internal Server Error"}));
 	}
 });
+
 
 database.post("/register", Index.upload.none(), async (req, res, next) => {
-	var data = fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
 	data = JSON.parse(data);
 
-	if (data?.registered) {
-		res.status(401).send();
-	} else {
+
+
 		const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
 
-		await client.connect();
+		try{
 
-		data.registered = true;
+			await client.connect();
 
-		fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"), JSON.stringify(data));
+			await client.query(
+				`INSERT INTO "ossk_users" (login_name, password_hash) VALUES ('${req?.body.login_name}','${Index.sha256(req?.body.login_password)}')`,
+			);
+	
+			res.cookie("login_name", req.body.login_name, { expires: new Date(Date.now() + 900000), httpOnly: true });
+			res.cookie("password_hash", Index.sha256(req?.body.login_password), {
+				expires: new Date(Date.now() + 900000),
+				httpOnly: true,
+			});
+	
+			res.status(200).send();
+	
+			await client.end();
 
-		await client.query(
-			`INSERT INTO "users" (login_name, password_hash) VALUES ('${req?.body.login_name}','${Index.sha256(req?.body.login_password)}')`,
-		);
+		}
+		catch(e){
+			console.log(e)
 
-		res.cookie("login_name", req.body.login_name, { expires: new Date(Date.now() + 900000), httpOnly: true });
-		res.cookie("password_hash", Index.sha256(req?.body.login_password), {
-			expires: new Date(Date.now() + 900000),
-			httpOnly: true,
-		});
+			res.status(400).send(await Components.public.ErrorBox.html({message: "Registration Failed"}))
+		}
 
-		res.status(200).send();
-
-		await client.end();
-	}
+	
 });
+
+
+
+root.post("/login", upload.none(), async (req, res) => {
+
+	const data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+
+	data = await JSON.parse(data)
+
+
+	const client = new Client({ connectionString: data.PG_CONNECTION_STRING });
+
+
+	console.log(req.body)
+
+
+	res.send(5001)
+	// try {
+
+	// 	await client.connect();
+
+
+	// 	const record = await client.query(
+	// 		`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.body["login_name"]}'`,
+	// 	);
+	// } catch (error) {
+	// 	console.log(error);
+	// 	res.statusCode = 500;
+	// 	res.send();
+	// }
+
+	// try {
+	// 	if (record.rowCount == 0) {
+	// 		res.statusCode = 404;
+	// 		res.send();
+	// 	} else if (record.rowCount == 1) {
+	// 		if (record.rows[0]["password_hash"] == sha256(req.body["login_password"])) {
+	// 			res.cookie("login_name", record.rows[0]["login_name"]);
+	// 			res.cookie("password_hash", record.rows[0]["password_hash"]);
+	// 			res.statusCode = 202;
+	// 			res.send();
+	// 			// res.redirect(new URL(`/admin/${record.rows[0]["id"]}`, req.protocol + "://" + req.get("host")));
+	// 		} else {
+	// 			res.statusCode = 401;
+	// 			res.send();
+	// 		}
+	// 	} else {
+	// 		res.statusCode = 500;
+	// 		res.send();
+	// 	}
+	// } catch (error) {
+	// 	res.statusCode = 500;
+	// 	res.send();
+	// }
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
 
 // database.post("/", Index.express.json(), async (req, res) => {
 // 	var record;

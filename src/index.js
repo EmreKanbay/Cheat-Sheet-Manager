@@ -33,6 +33,7 @@ module.exports = {
 const root = express();
 const getComponents = require("./Routes/getComponent");
 const database = require("./Routes/database");
+const { error } = require("console");
 
 // Setup Middlewares
 root.use(cors());
@@ -44,80 +45,119 @@ root.use(cookieParser());
 
 var DB_CHECK = async (req, res, data) => {
 
-	try{
-	
-
 		const client = new Client({ connectionString: data.PG_CONNECTION_STRING });
 		
 		try{
 			//db connected
 			await client.connect()
+			
+			await TestDB(req, res, data, client)
  
-			await DB_INITIALIZE_CHECK(req, res, data, client)
-
+			// DB_INIT_CHECK(req, res, data)
 		}
 		//connection failed
 		catch(e){
-			console.log(e)
-			if(data?.initialized){
-				//connection failed
+			if(data.initialized){
 				res.send(
-					await AdminLayout.html(
-						(initialPage = await Components.private.PageHome.html(
-							(script = await Components.private.PageHome.js()),
-						)),
-						(script = await AdminLayout.js()),
-						(modal = await Components.public.DialogConfig.html(
-							(script = await Components.public.DialogConfig.js()),
-							(clientData = "Database Connection Failed"),
-						)),
-					),
-				);
+			await AdminLayout.html(
+				(initialPage = await Components.private.PageHome.html(
+					(script = await Components.private.PageHome.js()),
+				)),
+				(script = await AdminLayout.js()),
+				(modal = await Components.public.DialogAlert.html(
+					(script = await Components.public.DialogAlert.js()),
+					(clientData = "DB is initialized before but unable to connect now, reloading the page may solve the error "),
+				)),
+			),
+		);
+		client.end()
 
-			}else{
-				//CONFİGURE DB
+			}else  {
+
 				res.send(
-				await AdminLayout.html(
-					(initialPage = await Components.private.PageHome.html(
-						(script = await Components.private.PageHome.js()),
-					)),
-					(script = await AdminLayout.js()),
-					(modal = await Components.public.DialogConfig.html(
-						(script = await Components.public.DialogConfig.js()),
-						(clientData = "Initialize Neon Database"),
-					)),
-				),
-			);
+			await AdminLayout.html(
+				(initialPage = await Components.private.PageHome.html(
+					(script = await Components.private.PageHome.js()),
+				)),
+				(script = await AdminLayout.js()),
+				(modal = await Components.public.DialogConfig.html(
+					(script = await Components.public.DialogConfig.js()),
+					(clientData = "Initialize Neon Database"),
+				)),
+			),
+		);
+		client.end()
+
 			}
+			
+			// if(data?.initialized){
+			// 	//connection failed
+			// 	res.send("DB connection failed and it already initialized")
+
+			// }else{
+			// 	//CONFİGURE DB
+			// 	res.send(
+			// 	await AdminLayout.html(
+			// 		(initialPage = await Components.private.PageHome.html(
+			// 			(script = await Components.private.PageHome.js()),
+			// 		)),
+			// 		(script = await AdminLayout.js()),
+			// 		(modal = await Components.public.DialogConfig.html(
+			// 			(script = await Components.public.DialogConfig.js()),
+			// 			(clientData = "Initialize Neon Database"),
+			// 		)),
+			// 	),
+			// );
+			// }
 
 		}
 		
-	
-	}catch(error){
-	
-	
-		console.log(error)
-		res.status(500).send('<h1>Internal Server Error</h1>')
-	
-	}
+
 		
 }
 
-var DB_INITIALIZE_CHECK = async (req, res, data, client) => {
+ const TestDB = async (req, res, data, client)=> {
 
-	try{
 
-		var response = await client.query(`Select * from "ossk_users"`)
+	
+try{//is database healty
+
+	var response = await client.query(`SELECT * FROM "ossk_users" `)
+	DBUserData(req,res,data,client,response)
+ }
+catch(e){
+
+
+data.initialized = false
+
+await fs.writeFileSync(path.join(__dirname, "..", "env.json"), JSON.stringify(data));
+
+
+//INITIALIZE NEON DATABASE MODAL
+ res.send(
+	await AdminLayout.html(
+		(initialPage = await Components.private.PageHome.html(
+			(script = await Components.private.PageHome.js()),
+		)),
 		
-		// DB has single user
-		if (response.rows.length == 1){
-			await USER_CREDENTIALS_CHECK(req, res, data, client)
+		(script = await AdminLayout.js()),
+		(modal = await Components.public.DialogIntializeDB.html(
+			(script = await Components.public.DialogIntializeDB.js())
+		)),
+	),
+);
+client.end()
 
-		}
-		// register
-		else if(response.rows.length == 0){
+}
 
-			res.send(
+ }
+
+ const DBUserData = async (req,res,data,client,response) => {
+
+
+switch(response.rows.length){
+	case 0:
+		res.send(
 			await AdminLayout.html(
 				(initialPage = await Components.private.PageHome.html(
 					(script = await Components.private.PageHome.js()),
@@ -127,95 +167,103 @@ var DB_INITIALIZE_CHECK = async (req, res, data, client) => {
 					(script = await Components.public.DialogRegister.js()),
 				)),
 			),
-		);			
+		);
+		client.end()
 
-		}
-		// DB corrupted
-		else{
-			res.send("<h1>Has multiple accounts, DB is corrupted</h1>")
-		}
-  
-	
+	break;
+	case 1:
+
+	await ChekedIfLoggedIn(req, res, data, client)
+
+ 
+
+	break;
+
+	default:
+		res.send(
+			await AdminLayout.html(
+				(initialPage = await Components.private.PageHome.html(
+					(script = await Components.private.PageHome.js()),
+				)),
+				(script = await AdminLayout.js()),
+				(modal = await Components.public.DialogAlert.html(
+					(script = await Components.public.DialogAlert.js()),
+					(clientData = "Multiple Users Found In DB  and Thats a problem"),
+				)),
+			),
+		);
+		client.end()
+
+
+	break;
+
+}
+
+
+
+
+ }
+
+
+ const ChekedIfLoggedIn =async (req, res, data, client)=> {
+
+ 
+	try{
+var response = await client.query(`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.cookies?.login_name}' AND password_hash='${req.cookies?.password_hash}'`)
+
+
+ 
+ 	if(response.rows.length == 1){
+
+		res.send(
+	await AdminLayout.html(
+		(initialPage = await Components.private.PageHome.html(
+			(script = await Components.private.PageHome.js()),
+		)),
+		(script = await AdminLayout.js()),
+	),
+);
+client.end()
+
+
+	}else{
+
+		res.clearCookie("login_name");
+		res.clearCookie("password_hash");
+
+
+		res.send(
+			await AdminLayout.html(
+				(initialPage = await Components.private.PageHome.html(
+					(script = await Components.private.PageHome.js()),
+				)),
+				(script = await AdminLayout.js()),
+				(modal = await Components.public.DialogLogin.html(
+					(script = await Components.public.DialogLogin.js())
+				)),
+			),
+		);
+		client.end()
 	}
-	
-		// INTIIALIZE AND REgıSTER
-		catch(e){
-
-		console.log(e)
-
-		try {
-			await client.query(
-				`CREATE TABLE IF NOT EXISTS "ossk_users" (id SERIAL PRIMARY KEY,login_name text, password_hash text)`,
-			);
-
-			data.initialized = true;
-
-			fs.writeFileSync(path.join(__dirname, "..", "env.json"), JSON.stringify(data));
-			
-			res.send(
-				await AdminLayout.html(
-					(initialPage = await Components.private.PageHome.html(
-						(script = await Components.private.PageHome.js()),
-					)),
-					(script = await await AdminLayout.js()),
-					(modal = await Components.public.DialogRegister.html(
-						(script = await Components.public.DialogRegister.js()),
-					)),
-				),
-			);		
+	}catch(e){
+console.log(error)
+res.send(
+	await AdminLayout.html(
+		(initialPage = await Components.private.PageHome.html(
+			(script = await Components.private.PageHome.js()),
+		)),
+		(script = await AdminLayout.js()),
+		(modal = await Components.public.DialogAlert.html(
+			(script = await Components.public.DialogAlert.js()),
+			(clientData = "Internal server error" + error),
+		)),
+	),
+);
+client.end()
 		
-		} catch (error) {
-			console.log(error);
-			res.send("<h1>DB initialization failed</h1>")
- 		}
-
-
-
 	}
-
-}
-
-var USER_CREDENTIALS_CHECK = async (req, res, data, client) => {
-
-	try {
-		record = await client.query(
-			`SELECT login_name, password_hash FROM "users" WHERE login_name='${req.cookies?.login_name}' AND  password_hash='${req.cookies?.password_hash}' `,
-		);
-
-		if (record?.rows.length == 1){
-
-			res.send(
-			await AdminLayout.html(
-				(initialPage = await Components.private.PageHome.html(
-					(script = await Components.private.PageHome.js()),
-				)),
-				(script = await AdminLayout.js()),
-			),
-		);
-
-		} else{
-			res.send(
-			await AdminLayout.html(
-				(initialPage = await Components.private.PageHome.html(
-					(script = await Components.private.PageHome.js()),
-				)),
-				(script = await AdminLayout.js()),
-				(modal = await Components.public.DialogUnauthorized.html()),
-			),
-		);
-
-		}
-
-
-
-	} catch (error) {
-		console.log(error);
-		res.statusCode = 500;
-		res.send();
-	}
-
-}
-
+ 
+ }
 
 
 root.get("/", 
@@ -233,50 +281,6 @@ root.use("/assets", express.static(path.join(__dirname, "Assets")));
 root.use("/get-component", getComponents);
 root.use("/database", database);
 
-
-// root.post("/login", upload.none(), async (req, res) => {
-// 	var record;
-
-// 	const data = fs.readFileSync(path.join(__dirname, "..", "env.json"), { encoding: "utf8", flag: "r" });
-
-// 	const client = new Client({ connectionString: JSON.parse(data).PG_CONNECTION_STRING });
-
-// 	await client.connect();
-
-// 	try {
-// 		record = await client.query(
-// 			`SELECT login_name, password_hash FROM "users" WHERE login_name='${req.body["login_name"]}'`,
-// 		);
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.statusCode = 500;
-// 		res.send();
-// 	}
-
-// 	try {
-// 		if (record.rowCount == 0) {
-// 			res.statusCode = 404;
-// 			res.send();
-// 		} else if (record.rowCount == 1) {
-// 			if (record.rows[0]["password_hash"] == sha256(req.body["login_password"])) {
-// 				res.cookie("login_name", record.rows[0]["login_name"]);
-// 				res.cookie("password_hash", record.rows[0]["password_hash"]);
-// 				res.statusCode = 202;
-// 				res.send();
-// 				// res.redirect(new URL(`/admin/${record.rows[0]["id"]}`, req.protocol + "://" + req.get("host")));
-// 			} else {
-// 				res.statusCode = 401;
-// 				res.send();
-// 			}
-// 		} else {
-// 			res.statusCode = 500;
-// 			res.send();
-// 		}
-// 	} catch (error) {
-// 		res.statusCode = 500;
-// 		res.send();
-// 	}
-// });
 
 
 

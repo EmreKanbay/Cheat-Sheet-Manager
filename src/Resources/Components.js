@@ -54,6 +54,8 @@ const Spring = require("./Components/Docs/Spring");
 const Flask = require("./Components/Docs/Flask");
 const Express = require("./Components/Docs/Express");
 const Phoneix = require("./Components/Docs/Phoneix");
+const DialogIntializeDB = require("./Components/DialogIntializeDB");
+const DialogAlert = require("./Components/DialogAlert");
 
 module.exports = {
 	docs: {
@@ -111,6 +113,8 @@ module.exports = {
 		ErrorBox,
 		DialogConfig,
 		DialogRegister,
+		DialogIntializeDB,
+		DialogAlert
 	},
 	private: {
 		PageHome,

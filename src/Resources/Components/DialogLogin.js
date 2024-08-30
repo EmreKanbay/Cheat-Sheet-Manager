@@ -133,16 +133,21 @@ module.exports = {
 			}
 		</style>
 	`,
-	js: clientData => js`document.querySelector(".ED323G-form").addEventListener("submit", async e => {
+	js: clientData => js`
+	
+	document.querySelector(".ED323G-form").addEventListener("submit", async e => {
 					e.preventDefault();
+
  					const formData = new FormData();
 					formData.append("login_name", document.querySelector(".ED323G-username-input").value);
 					formData.append("login_password", document.querySelector(".ED323G-password-input").value);
+					
+					
 					try {
 						document.querySelector(".ED323G-loading").classList.add("active");
 						document.querySelector(".ED323G-login-error").innerHTML = "";
 
-						const res = await fetch("/login", {
+						const res = await fetch("/database/login", {
 							body: formData,
 							method: "POST",
 						});
@@ -151,53 +156,14 @@ module.exports = {
 						// 	window.location.replace(res.url);
 						// }
 
-						if (res.status == 202) {
+						if (res.ok) {
 						
 						document.querySelector(".ED323G-dialog").nextElementSibling.remove()
 						document.querySelector(".ED323G-dialog").previousElementSibling.remove()
 						document.querySelector(".ED323G-dialog").remove()
 						
 						}
-						else if (res.status == 404) {
-							try {
-								fetch("/get-component/public/ErrorBox", {
-  									method: "POST",
-									body: JSON.stringify({ message: "User Not Found" }),
-									headers: {"Content-Type":"application/json"}
-								})
-									.then(e => e.json())
-									.then(e => {
-										document.querySelector(".ED323G-loading").classList.remove("active");
-										document.querySelector(".ED323G-login-error").innerHTML = e.html;
-									});
-							} catch {}
-						} else if (res.status == 401) {
-							try {
-								fetch("/get-component/public/ErrorBox", {
-									headers: { "Content-Type": "application/json" },
-									body: JSON.stringify({ message: "Password Is Inaccurate" }),
-									method: "POST",
-								})
-									.then(e => e.json())
-									.then(e => {
-										document.querySelector(".ED323G-loading").classList.remove("active");
-										document.querySelector(".ED323G-login-error").innerHTML = e.html;
-									});
-							} catch {}
-						} else if (res.status == 500) {
-							try {
-								fetch("/get-component/public/ErrorBox", {
-									headers: { "Content-Type": "application/json" },
-									body: JSON.stringify({ message: "Internal Server Error" }),
-									method: "POST",
-								})
-									.then(e => e.json())
-									.then(e => {
-										document.querySelector(".ED323G-loading").classList.remove("active");
-										document.querySelector(".ED323G-login-error").innerHTML = e.html;
-									});
-							} catch {}
-						} else if (!res.ok) {
+ 						 else if (!res.ok) {
 							try {
 								fetch("/get-component/public/ErrorBox", {
 									headers: { "Content-Type": "application/json" },
@@ -211,6 +177,10 @@ module.exports = {
 									});
 							} catch {}
 						}
+
+
+
+						
 					} catch (error) {
 						document.querySelector(".ED323G-loading").classList.remove("active");
 						document.querySelector(".ED323G-login-error").innerHTML = \` <h1>Network Error</h1>\`;

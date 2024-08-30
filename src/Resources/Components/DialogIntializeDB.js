@@ -32,14 +32,6 @@ const js = async (x, ...values) => {
 	return rendered;
 };
 
-
-
-	
-
-
-
-
-
 module.exports = {
 	html: (script, clientData) => html`
 		<dialog
@@ -47,28 +39,19 @@ module.exports = {
 			open>
 			<h3 class="HZjHbp-dialog-title">Neon Database</h3>
 			<form class="HZjHbp-form">
-				<p class="HZjHbp-form-detail">${clientData}</p>
-
-				<p class="HZjHbp-form-string">Conenction String</p>
-				<input
-					placeholder="postgresql://user:password@host/database"
-					class="HZjHbp-neon-string-input"
-					type="password" />
-				<a
-					class="HZjHbp-dialog-how-to-video"
-					href="">
-					how to get connection string for free under 3 minutes
-				</a>
+				<p class="HZjHbp-form-detail">DB connected succesfully but not initialized</p>
 
 				<input
 					type="submit"
-					value="Connect Neon Database" />
+					value="Initialize Neon Database" />
+
 
 				<div class="HZjHbp-login-error"></div>
 
-				<div class="HZjHbp-loading loading-inline"></div> 
+				<div class="HZjHbp-loading loading-inline"></div>
 
- 			</form>
+  
+			</form>
 		</dialog>
 
 		${() => {
@@ -200,8 +183,8 @@ module.exports = {
 		</style>
 	`,
 	js: clientData => js`
-
-
+	
+	
 document.querySelector(".HZjHbp-form").addEventListener("submit",async (e) => {
 	e.preventDefault()
 
@@ -212,10 +195,8 @@ document.querySelector(".HZjHbp-form").addEventListener("submit",async (e) => {
 						document.querySelector(".HZjHbp-loading").classList.add("active");
 						document.querySelector(".HZjHbp-login-error").innerHTML = "";
 
-						const res = await fetch("/database/connect", {
-							body: JSON.stringify({ db_string: document.querySelector(".HZjHbp-neon-string-input").value }),
-							headers: {"Content-Type":"application/json"},
-							method: "POST",
+						const res = await fetch("/database/initialize", {
+ 							method: "POST",
 						});
 
 						if (!res.ok) {
@@ -236,7 +217,6 @@ document.querySelector(".HZjHbp-form").addEventListener("submit",async (e) => {
 						document.querySelector(".HZjHbp-login-error").innerHTML = " <h1>Error</h1> ";
 					}
 				})
-					
- 
-`}
 
+`,
+};

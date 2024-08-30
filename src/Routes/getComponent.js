@@ -13,15 +13,45 @@ getComponent.post("/private/:component_name", Index.express.json(), async (req, 
 
 	const client = new Index.Client({ connectionString: JSON.parse(data).PG_CONNECTION_STRING });
 
-	client.connect();
+	client.connect().then(async () => {
 
-	try {
-		if (typeof req.cookies?.login_name != "undefined" && typeof req.cookies?.password_hash != "undefined") {
-			record = await client.query(
-				`SELECT login_name, password_hash FROM "users" WHERE login_name='${req.cookies?.login_name}' AND password_hash='${req.cookies?.password_hash}'`,
-			);
-
-			if (record.rows.length == 1) {
+		try {
+			if (typeof req.cookies?.login_name != "undefined" && typeof req.cookies?.password_hash != "undefined") {
+				record = await client.query(
+					`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.cookies?.login_name}' AND password_hash='${req.cookies?.password_hash}'`,
+				);
+	
+				if (record.rows.length == 1) {
+				} else {
+					res.send(
+						JSON.stringify({
+							html: "<h1>Unauthorized Access</h1>",
+							js: null,
+						}),
+					);
+					client.end();
+					return;
+				}
+	
+				if (typeof Components.private[req.params.component_name] != "undefined") {
+					res.send(
+						JSON.stringify({
+							html: await Components.private[req.params.component_name].html(
+								(clientData = typeof req.body == "object" ? req.body : null),
+							),
+							js: await Components.private[req.params.component_name].js(
+								(clientData = typeof req.body == "object" ? req.body : null),
+							),
+						}),
+					);
+				} else {
+					res.send(
+						JSON.stringify({
+							html: "<h1>Component Not Found</h1>",
+							js: null,
+						}),
+					);
+				}
 			} else {
 				res.send(
 					JSON.stringify({
@@ -29,48 +59,29 @@ getComponent.post("/private/:component_name", Index.express.json(), async (req, 
 						js: null,
 					}),
 				);
-				client.end();
-				return;
 			}
-
-			if (typeof Components.private[req.params.component_name] != "undefined") {
-				res.send(
-					JSON.stringify({
-						html: await Components.private[req.params.component_name].html(
-							(clientData = typeof req.body == "object" ? req.body : null),
-						),
-						js: await Components.private[req.params.component_name].js(
-							(clientData = typeof req.body == "object" ? req.body : null),
-						),
-					}),
-				);
-			} else {
-				res.send(
-					JSON.stringify({
-						html: "<h1>Component Not Found</h1>",
-						js: null,
-					}),
-				);
-			}
-		} else {
+			client.end();
+		} catch (error) {
+			console.log(error);
 			res.send(
 				JSON.stringify({
-					html: "<h1>Unauthorized Access</h1>",
+					html: "<h1>Internel Server Error</h1>",
 					js: null,
 				}),
 			);
+			client.end();
 		}
-		client.end();
-	} catch (error) {
-		console.log(error);
+	}).catch(async (e) => {
+
 		res.send(
 			JSON.stringify({
-				html: "<h1>Internel Server Error</h1>",
+				html: "<h1>Unauthorized Access</h1>",
 				js: null,
 			}),
 		);
-		client.end();
-	}
+	})
+
+
 });
 
 getComponent.post("/public/:component_name", Index.express.json(), async (req, res) => {
@@ -92,21 +103,34 @@ getComponent.post("/public/:component_name", Index.express.json(), async (req, r
 });
 
 getComponent.post("/docs/:component_name", Index.express.json(), async (req, res) => {
-	if (typeof Components.docs[req.params.component_name] != "undefined") {
+	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+	data = await JSON.parse(data)
+	if(data.initialized == true){
+		if (typeof Components.docs[req.params.component_name] != "undefined") {
+			res.send(
+				JSON.stringify({
+					html: await Components.docs[req.params.component_name].html((clientData = req?.body)),
+					js: await Components.docs[req.params.component_name].js((clientData = req?.body)),
+				}),
+			);
+		} else {
+			res.send(
+				JSON.stringify({
+					html: "<h1>Component Not Found</h1>",
+					js: null,
+				}),
+			);
+		}
+
+	}else{
 		res.send(
 			JSON.stringify({
-				html: await Components.docs[req.params.component_name].html((clientData = req?.body)),
-				js: await Components.docs[req.params.component_name].js((clientData = req?.body)),
-			}),
-		);
-	} else {
-		res.send(
-			JSON.stringify({
-				html: "<h1>Component Not Found</h1>",
+				html: "<h1>Unauthorized Access</h1>",
 				js: null,
 			}),
 		);
 	}
+
 });
 
 module.exports = getComponent;
