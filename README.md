@@ -1,11 +1,11 @@
 # Ultimate Open Source Starter Kit | for Neon
 
-> Author: Zayd al-Muqaddim al-Qamar al-‘Aarabi
+> Special thanks to Zayd al-Muqaddim al-Qamar al-‘Aarabi for all his contributions.
 
 ![](./src/Assets/presentation.gif)
 
 
-NOTE: All the content on this app is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
+NOTE: All the cheat sheets on this app is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
 
 Dashboard design is from this codepen https://codepen.io/jaca90/pen/vZJZMx
 
@@ -87,5 +87,9 @@ Backend: Node JS - Express JS
 
 Database: Postgres
 
+
+### TODO
+
+- Settings page is not functional yet
 
  
