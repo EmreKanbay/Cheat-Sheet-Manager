@@ -5,12 +5,14 @@
 ![](./src/Assets/presentation.gif)
 
 
-NOTE: All the content here is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
+NOTE: All the content on this app is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
+
+Dashboard design is from this codepen https://codepen.io/jaca90/pen/vZJZMx
 
 ## What is this app?
 
-- This app is a single UI for cheat sheets of most used frameworks and most used tools for Open Source Softwares
-- You can find boilerplate codes and most used commands for the tools you use often like **git**, **Markdown Sytax**, **Docker** and so on
+- This app is a single UI for **cheat sheets** of most used **frameworks** and most used **tools** for Open Source Softwares
+- You can find **boilerplate codes** and **most used commands** for the tools you use often like **git**, **Markdown Sytax**, **Docker** and so on
 
 ### What is included (For now)
 
@@ -84,3 +86,6 @@ Frontend: Vanilla JS
 Backend: Node JS - Express JS
 
 Database: Postgres
+
+
+ 
