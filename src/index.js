@@ -37,6 +37,37 @@ const database = require("./Routes/database");
 // Setup Middlewares
 root.use(cors());
 root.use(cookieParser());
+
+
+// db check
+root.use("/", (req, res, next), ()=> {
+try{
+
+	const data = fs.readFileSync(path.join(__dirname, "..", "env.json"), { encoding: "utf8", flag: "r" });
+	const client = new Client({ connectionString: JSON.parse(data).PG_CONNECTION_STRING });
+	client.connect().then(() => {next()}).catch((e) => {console.log(e); res.status(500).send('<h1>Internal Server Error</h1>')})
+
+}catch(error){
+
+
+	console.log(error)
+	res.status(500).send('<h1>Internal Server Error</h1>')
+
+}
+	
+
+})
+
+
+
+// User Check 
+
+
+
+
+
+
+
 root.use("/assets", express.static(path.join(__dirname, "Assets")));
 root.use("/get-component", getComponents);
 root.use("/database", database);
@@ -85,8 +116,10 @@ root.post("/login", upload.none(), async (req, res) => {
 	}
 });
 
-root.use(
-	"/",
+
+
+
+root.use("/",
 	(req, res, next) => {
 		if (req.path == "/") next();
 		else if (String(req.path).split("/")[1] == "assets") next();
