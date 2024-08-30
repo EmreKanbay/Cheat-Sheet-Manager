@@ -195,9 +195,11 @@ module.exports = {
 	
  	if (res.ok){
 	
+		document.querySelector(".ku3uKC-dialog").nextElementSibling.remove()
+		document.querySelector(".ku3uKC-dialog").nextElementSibling.remove()
+		document.querySelector(".ku3uKC-dialog").remove()
 	
-	window.location.href = "/"
-	
+ 	
 	} else if(!res.ok){
 	
 		document.querySelector(".ku3uKC-loading").classList.remove("active");

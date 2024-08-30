@@ -56,7 +56,8 @@ module.exports = {
 					type="password" />
 				<a
 					class="HZjHbp-dialog-how-to-video"
-					href="">
+					target="_blank"
+					href="https://github.com/user-attachments/assets/c1e4bbee-c1e3-4bdd-87fc-94421b58f19d">
 					how to get connection string for free under 3 minutes
 				</a>
 

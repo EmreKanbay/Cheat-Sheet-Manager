@@ -5,6 +5,8 @@
 ![](./src/Assets/presentation.gif)
 
 
+NOTE: All the content here is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
+
 ## What is this app?
 
 - This app is a single UI for cheat sheets of most used frameworks and most used tools for Open Source Softwares
@@ -16,7 +18,7 @@ Git, Docker, Markdown Syntax, Lisances
 
 NGINX, Apache, Ngrok, Certbot, SSH
 
-Prettier, Eslint, Eslint
+Prettier, Eslint, Webpack
 
 Postgres, MongoDB, MySQL Redis, Caassandra, Neo4j
 
@@ -69,9 +71,16 @@ Warning: **do not use nodemon**, it will throw network error.
 
 
 
+### Missing Features
+
+- CRUD must be included, so user can modify content only on frontend without hassle.
+
+- Vulnerable to SQL injection.
 
 #### Tech Stack Used(For Contributers):
 
 Frontend: Vanilla JS
+
 Backend: Node JS - Express JS
+
 Database: Postgres

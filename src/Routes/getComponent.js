@@ -9,30 +9,22 @@ const getComponent = Index.express.Router();
 getComponent.post("/private/:component_name", Index.express.json(), async (req, res) => {
 	var record;
 
-	const data = fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+	const data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
 
 	const client = new Index.Client({ connectionString: JSON.parse(data).PG_CONNECTION_STRING });
 
 	client.connect().then(async () => {
 
 		try {
-			if (typeof req.cookies?.login_name != "undefined" && typeof req.cookies?.password_hash != "undefined") {
-				record = await client.query(
+ 				record = await client.query(
 					`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.cookies?.login_name}' AND password_hash='${req.cookies?.password_hash}'`,
 				);
 	
+
 				if (record.rows.length == 1) {
-				} else {
-					res.send(
-						JSON.stringify({
-							html: "<h1>Unauthorized Access</h1>",
-							js: null,
-						}),
-					);
-					client.end();
-					return;
-				}
 	
+
+								
 				if (typeof Components.private[req.params.component_name] != "undefined") {
 					res.send(
 						JSON.stringify({
@@ -52,16 +44,28 @@ getComponent.post("/private/:component_name", Index.express.json(), async (req, 
 						}),
 					);
 				}
-			} else {
-				res.send(
-					JSON.stringify({
-						html: "<h1>Unauthorized Access</h1>",
-						js: null,
-					}),
-				);
-			}
-			client.end();
-		} catch (error) {
+			 
+				await client.end()
+				return
+				} else {
+					res.send(
+						JSON.stringify({
+							html: "<h1>Unauthorized Access</h1>",
+							js: null,
+						}),
+					);
+					await client.end();
+					return;
+				}
+	
+
+
+
+
+
+	
+	
+ 		} catch (error) {
 			console.log(error);
 			res.send(
 				JSON.stringify({
@@ -105,6 +109,7 @@ getComponent.post("/public/:component_name", Index.express.json(), async (req, r
 getComponent.post("/docs/:component_name", Index.express.json(), async (req, res) => {
 	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
 	data = await JSON.parse(data)
+	
 	if(data.initialized == true){
 		if (typeof Components.docs[req.params.component_name] != "undefined") {
 			res.send(

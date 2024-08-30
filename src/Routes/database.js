@@ -1,5 +1,4 @@
 const Components = require("../Resources/Components");
-const env = require("../../env.json");
 const Index = require("#Index");
 const fs = require("fs");
 const path = require("path");
@@ -69,24 +68,29 @@ database.post("/connect", Index.express.json(), async (req, res) => {
  
 
 					try {
-						data.PG_CONNECTION_STRING = req.body.db_string;
-						data.initialized = true;
+						
 
 						await client.query(`DROP TABLE IF EXISTS "ossk_users"`)
 						await client.query(`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `)
 
+						data.PG_CONNECTION_STRING = req.body.db_string;
+						data.initialized = true;
+						
 						await fs.writeFileSync(path.join(Index.__rootDir, "..", "env.json"),await JSON.stringify(data));
 						
 						res.status(200).send();
 						
+						await client.end()
 						return
 					} catch (error) {
 						console.log(error)
 						
 						res.status(501).send(await Components.public.ErrorBox.html({message: "Initialization Failed"}));
+						
+						await client.end();
+						return
 					}
 				
-				await client.end();
 			})
 			.catch(async e => {
  				await client.end();
@@ -100,6 +104,8 @@ database.post("/connect", Index.express.json(), async (req, res) => {
 	} catch (error) {
 		console.log("error");
 		res.status(500).send(await Components.public.ErrorBox.html({message: "Internal Server Error"}));
+		await client.end();
+
 	}
 });
 
@@ -135,6 +141,8 @@ database.post("/register", Index.upload.none(), async (req, res, next) => {
 			console.log(e)
 
 			res.status(400).send(await Components.public.ErrorBox.html({message: "Registration Failed"}))
+			await client.end();
+
 		}
 
 	
@@ -142,57 +150,52 @@ database.post("/register", Index.upload.none(), async (req, res, next) => {
 
 
 
-root.post("/login", upload.none(), async (req, res) => {
+database.post("/login", Index.upload.none(), async (req, res) => {
 
-	const data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
 
 	data = await JSON.parse(data)
 
 
-	const client = new Client({ connectionString: data.PG_CONNECTION_STRING });
+	const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
+
+	await client.connect();
+		const record = await client.query(
+			`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.body["login_name"]}'`,
+		);
 
 
-	console.log(req.body)
+		if (record.rowCount == 0) {
+			res.status(404).send(await Components.public.ErrorBox.html({message: "User Not Found"}))
+		await client.end()
+			return		
+		}
 
 
-	res.send(5001)
-	// try {
 
-	// 	await client.connect();
+		else if (record.rowCount == 1) {
 
+			if (record.rows[0]["password_hash"] == Index.sha256(req.body["login_password"])) {
+				res.cookie("login_name", record.rows[0]["login_name"]);
+				res.cookie("password_hash", record.rows[0]["password_hash"]);
+				res.send();
 
-	// 	const record = await client.query(
-	// 		`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.body["login_name"]}'`,
-	// 	);
-	// } catch (error) {
-	// 	console.log(error);
-	// 	res.statusCode = 500;
-	// 	res.send();
-	// }
+		await client.end()
 
-	// try {
-	// 	if (record.rowCount == 0) {
-	// 		res.statusCode = 404;
-	// 		res.send();
-	// 	} else if (record.rowCount == 1) {
-	// 		if (record.rows[0]["password_hash"] == sha256(req.body["login_password"])) {
-	// 			res.cookie("login_name", record.rows[0]["login_name"]);
-	// 			res.cookie("password_hash", record.rows[0]["password_hash"]);
-	// 			res.statusCode = 202;
-	// 			res.send();
-	// 			// res.redirect(new URL(`/admin/${record.rows[0]["id"]}`, req.protocol + "://" + req.get("host")));
-	// 		} else {
-	// 			res.statusCode = 401;
-	// 			res.send();
-	// 		}
-	// 	} else {
-	// 		res.statusCode = 500;
-	// 		res.send();
-	// 	}
-	// } catch (error) {
-	// 	res.statusCode = 500;
-	// 	res.send();
-	// }
+		return
+			} else {
+			res.status(404).send(await Components.public.ErrorBox.html({message: "Password Is Incorrect"}))
+		
+		await client.end()
+				return
+		}
+			} else {
+			res.status(404).send(await Components.public.ErrorBox.html({message: "Multiple users has found, thats a problem"}))
+		await client.end()
+				return
+	
+		}
+  
 
 
 

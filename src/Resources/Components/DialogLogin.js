@@ -152,38 +152,27 @@ module.exports = {
 							method: "POST",
 						});
 
-						// if (res.redirected) {
-						// 	window.location.replace(res.url);
-						// }
 
 						if (res.ok) {
 						
 						document.querySelector(".ED323G-dialog").nextElementSibling.remove()
-						document.querySelector(".ED323G-dialog").previousElementSibling.remove()
+						document.querySelector(".ED323G-dialog").nextElementSibling.remove()
 						document.querySelector(".ED323G-dialog").remove()
 						
 						}
  						 else if (!res.ok) {
-							try {
-								fetch("/get-component/public/ErrorBox", {
-									headers: { "Content-Type": "application/json" },
-									body: JSON.stringify({ message: "Unknown Error" }),
-									method: "POST",
-								})
-									.then(e => e.json())
-									.then(e => {
+							
 										document.querySelector(".ED323G-loading").classList.remove("active");
-										document.querySelector(".ED323G-login-error").innerHTML = e.html;
-									});
-							} catch {}
-						}
-
-
-
+										document.querySelector(".ED323G-login-error").innerHTML = await res.text();
 						
+							}
+
+
+
+
 					} catch (error) {
 						document.querySelector(".ED323G-loading").classList.remove("active");
-						document.querySelector(".ED323G-login-error").innerHTML = \` <h1>Network Error</h1>\`;
+						document.querySelector(".ED323G-login-error").innerHTML = " <h1>Network Error</h1>";
 					}
 				});
 `,
