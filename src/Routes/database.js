@@ -157,6 +157,106 @@ database.post("/login", Index.upload.none(), async (req, res) => {
 	}
 });
 
+
+database.post("/change-user-name", Index.upload.none() ,async (req, res) => {
+
+var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+
+data = await JSON.parse(data);
+
+const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
+
+await client.connect();
+
+try{
+ 	const record = await client.query(
+		`UPDATE "ossk_users" SET login_name = '${req.body.newUsername}' WHERE id = 1`,
+	);
+
+res.send(await Components.public.SuccessBox.html({ message: `Username changed to "${req.body.newUsername}", you need to reload the page in order to log in` }))
+
+}catch(e){
+console.log(e)
+
+res.status(500).send(await Components.public.ErrorBox.html({ message: `unsable to change username` }))
+}
+
+
+client.end()
+
+})
+
+
+database.post("/change-user-password", Index.upload.none() ,async (req, res) => {
+
+	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+	
+	data = await JSON.parse(data);
+	
+	const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
+	
+	await client.connect();
+	
+	try{
+		const record = await client.query(
+			`SELECT login_name, password_hash FROM "ossk_users" WHERE login_name='${req.cookies["login_name"]}' AND password_hash='${Index.sha256(req.body["currentPassword"])}'`,
+		);
+ 
+if(record.rows.length == 1){
+ 
+
+	try{
+		const record = await client.query(
+		   `UPDATE "ossk_users" SET password_hash = '${Index.sha256(req.body.newPassword)}' WHERE id = 1`,
+	   );
+   
+   res.send(await Components.public.SuccessBox.html({ message: `Password changed to "${req.body.newPassword}", you need to reload the page in order to log in` }))
+    
+   }catch(e){
+   console.log(e)
+   
+   res.status(500).send(await Components.public.ErrorBox.html({ message: `unsable to change password` }))
+   }
+
+
+
+
+}else{
+
+	res.send(await Components.public.ErrorBox.html({ message: `Current password is not accurate` }))
+}
+
+	}catch(e){
+console.log(e)
+
+res.send(await Components.public.ErrorBox.html({ message: `Error` }))
+
+	}
+
+ 
+console.log(req.body.newPassword)
+	
+
+ 	
+	client.end()
+	
+	})
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // database.post("/", Index.express.json(), async (req, res) => {
 // 	var record;
 // 	try {

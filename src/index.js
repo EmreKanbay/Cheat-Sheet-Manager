@@ -351,4 +351,5 @@ root.use("/database", database);
 // start server
 root.listen(3000, () => {
 	console.log("Server Connected");
+	console.log("running on http://localhost:3000/");
 });

@@ -4,9 +4,11 @@
 
 ![Presentation.gif](./src/Assets/presentation.gif)
 
+#### Live demo here -> ...
+
 NOTE: All the cheat sheets on this app is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
 
-Dashboard design is from this codepen https://codepen.io/jaca90/pen/vZJZMx
+Dashboard design is from this codepen -> https://codepen.io/jaca90/pen/vZJZMx
 
 ## What is this app?
 
@@ -83,6 +85,3 @@ Backend: Node JS - Express JS
 
 Database: Postgres
 
-### TODO
-
-- Settings page is not functional yet

@@ -70,7 +70,7 @@ module.exports = {
 
 							<div class="c-search">
 								Ultimate Open Source Starter Kit | For&nbsp;
-								<a href="https://neon.tech">Neon</a>
+								<a target="_blank" href="https://neon.tech">Neon</a>
 								&nbsp;Challange
 							</div>
 							<div class="header-icons-group">
@@ -119,6 +119,22 @@ module.exports = {
 											<div class="c-menu-item__title"><span>Projects</span></div>
 										</div>
 									</li>
+
+
+										<li
+										onclick="ChangeContent('PageCustom')"
+										class="c-menu__item  customPage"
+										data-toggle="tooltip"
+										title="Modules">
+										<div class="c-menu__item__inner">
+											<img
+												style="filter:invert(1)"
+												src="/assets/pen.svg"
+												class="sidebar-menu-icons" />
+											<div class="c-menu-item__title"><span>Custom</span></div>
+										</div>
+									</li>
+
 
 									<li
 										onclick="ChangeContent('PageHelp')"
