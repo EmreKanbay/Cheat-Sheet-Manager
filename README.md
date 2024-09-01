@@ -2,7 +2,7 @@
 
 > Special thanks to Zayd al-Muqaddim al-Qamar al-‘Aarabi for all his contributions.
 
-![Presentation.gif](./src/Assets/presentation.gif)
+![presentation gif](https://github.com/user-attachments/assets/085a6771-a94e-450f-8129-7036fefbfd3c)
 
 #### Live demo here -> ...
 
