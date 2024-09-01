@@ -2,7 +2,7 @@
 
 > Special thanks to Zayd al-Muqaddim al-Qamar al-‘Aarabi for all his contributions.
 
-![](./src/Assets/presentation.gif)
+![Presentation.gif](./src/Assets/presentation.gif)
 
 NOTE: All the cheat sheets on this app is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
 
@@ -73,7 +73,7 @@ Warning: **do not use nodemon**, it will throw network error.
 
 - CRUD must be included, so user can modify content only on frontend without hassle.
 
-- Vulnerable to SQL injection.
+- Vulnerable to SQL injection, request must be sanitized, parameterized.
 
 #### Tech Stack Used(For Contributers):
 
