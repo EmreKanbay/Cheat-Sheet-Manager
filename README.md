@@ -4,7 +4,7 @@
 
 ![presentation gif](https://github.com/user-attachments/assets/085a6771-a94e-450f-8129-7036fefbfd3c)
 
-#### Live demo here -> ...
+#### Live demo here -> [https://open-source-starter-kit-demo.onrender.com/](https://open-source-starter-kit-demo.onrender.com/)
 
 NOTE: All the cheat sheets on this app is AI generated, obviously me alone writing all this stuff is not quite possible. But contributors are highly appreciated.
 
