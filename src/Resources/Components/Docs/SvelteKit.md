@@ -70,7 +70,7 @@
     import Hello from '$lib/Hello.svelte';
   </script>
 
-  <Hello name=&quot;world&quot; />
+  <Hello name="world" />
   ```
 
 #### Stores
@@ -107,7 +107,7 @@
 
   ```svelte
   <!-- src/routes/[slug].svelte -->
-  <script context=&quot;module&quot;>
+  <script context="module">
     export async function load({ params }) {
       return {
         props: {

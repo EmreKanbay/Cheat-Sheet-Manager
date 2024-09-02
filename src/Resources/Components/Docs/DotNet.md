@@ -31,7 +31,7 @@ namespace HelloWorld
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(&quot;Hello, World!&quot;);
+            Console.WriteLine("Hello, World!");
         }
     }
 }
@@ -71,7 +71,7 @@ namespace HelloWorld
   double myDouble = 5.99;
   char myChar = 'D';
   bool myBool = true;
-  string myString = &quot;Hello&quot;;
+  string myString = "Hello";
   ```
 
 - **Arrays**:
@@ -136,7 +136,7 @@ namespace HelloWorld
   ```csharp
   class Car
   {
-      public string color = &quot;red&quot;;
+      public string color = "red";
   }
   ```
 
@@ -155,7 +155,7 @@ namespace HelloWorld
   {
       static void MyMethod()
       {
-          Console.WriteLine(&quot;I just got executed!&quot;);
+          Console.WriteLine("I just got executed!");
       }
   }
   ```

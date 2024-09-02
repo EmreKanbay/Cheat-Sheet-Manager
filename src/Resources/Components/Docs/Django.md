@@ -114,7 +114,7 @@
   from django.http import HttpResponse
 
   def my_view(request):
-      return HttpResponse(&quot;Hello, world!&quot;)
+      return HttpResponse("Hello, world!")
   ```
 
 - **Class-based View**:
@@ -125,7 +125,7 @@
 
   class MyView(View):
       def get(self, request):
-          return HttpResponse(&quot;Hello, world!&quot;)
+          return HttpResponse("Hello, world!")
   ```
 
 #### URLs

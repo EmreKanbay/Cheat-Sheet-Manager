@@ -31,7 +31,7 @@
 
 - **Creating Routes**:
 
-  - Analog JS uses a file-based routing system. To create a new route, simply add a new file in the `src/pages` directory. For example, to create an &quot;About&quot; page:
+  - Analog JS uses a file-based routing system. To create a new route, simply add a new file in the `src/pages` directory. For example, to create an "About" page:
 
     ```typescript
     // src/pages/about.ts

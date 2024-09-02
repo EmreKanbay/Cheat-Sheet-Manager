@@ -117,7 +117,7 @@
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name=&quot;Home&quot; component={HomeScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -137,7 +137,7 @@
     return (
       <View>
         <Text>{count}</Text>
-        <Button onPress={() => setCount(count + 1)} title=&quot;Increment&quot; />
+        <Button onPress={() => setCount(count + 1)} title="Increment" />
       </View>
     );
   }

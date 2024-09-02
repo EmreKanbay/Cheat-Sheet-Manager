@@ -12,7 +12,7 @@
    - Visit [Spring Initializr](https://start.spring.io/).
    - Select your project settings (e.g., Maven/Gradle, language, Spring Boot version).
    - Add dependencies as needed.
-   - Click &quot;Generate&quot; to download the project.
+   - Click "Generate" to download the project.
    - Extract the downloaded zip file and open it in your IDE.
 
 2. **Using Spring Boot CLI**:
@@ -22,7 +22,7 @@
    - **Using SDKMAN!**:
      - Install SDKMAN! by running:
        ```sh
-       curl -s &quot;https://get.sdkman.io&quot; | bash
+       curl -s "https://get.sdkman.io" | bash
        ```
      - Install Spring Boot CLI:
        ```sh
@@ -37,7 +37,7 @@
 - **@ComponentScan**: Configures component scanning directives for use with `@Configuration` classes.
 - **@Bean**: Indicates that a method produces a bean to be managed by the Spring container.
 - **@Autowired**: Marks a constructor, field, setter method, or config method to be autowired by Spring's dependency injection.
-- **@Component**: Indicates that an annotated class is a &quot;component&quot;.
+- **@Component**: Indicates that an annotated class is a "component".
 - **@Service**: Specialization of `@Component` for service layer.
 - **@Repository**: Specialization of `@Component` for persistence layer.
 - **@Controller**: Specialization of `@Component` for presentation layer (MVC).

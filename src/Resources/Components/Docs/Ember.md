@@ -58,7 +58,7 @@ export default class MyComponent extends Component {
 ```html
 <button
 	{{on
-	&quot;click&quot;
+	"click"
 	this.increment}}>
 	Increment
 </button>
@@ -84,7 +84,7 @@ export default class ChildComponent extends Component {
 <ChildComponent
 	@message='"Hello'
 	from
-	Parent!&quot; />
+	Parent!" />
 ```
 
 #### Event Handling
@@ -104,7 +104,7 @@ export default class MyComponent extends Component {
 ```html
 <button
 	{{on
-	&quot;click&quot;
+	"click"
 	this.handleClick}}>
 	Click me
 </button>
@@ -125,9 +125,9 @@ export default class MyComponent extends Component {
 <input
 	type='"text"'
 	{{on
-	&quot;input&quot;
+	"input"
 	(pick
-	&quot;target.value&quot;
+	"target.value"
 	this.updateName)}} />
 <p>Your name is: {{this.name}}</p>
 ```

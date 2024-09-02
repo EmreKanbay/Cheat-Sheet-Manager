@@ -112,11 +112,11 @@
 
   ```elixir
   # lib/my_app_web/router.ex
-  scope &quot;/&quot;, MyAppWeb do
+  scope "/", MyAppWeb do
     pipe_through :browser
 
-    get &quot;/&quot;, PageController, :index
-    resources &quot;/posts&quot;, PostController
+    get "/", PageController, :index
+    resources "/posts", PostController
   end
   ```
 
@@ -133,12 +133,12 @@
 
     def index(conn, _params) do
       posts = Blog.list_posts()
-      render(conn, &quot;index.html&quot;, posts: posts)
+      render(conn, "index.html", posts: posts)
     end
 
-    def show(conn, %{&quot;id&quot; => id}) do
+    def show(conn, %{"id" => id}) do
       post = Blog.get_post!(id)
-      render(conn, &quot;show.html&quot;, post: post)
+      render(conn, "show.html", post: post)
     end
   end
   ```
@@ -174,12 +174,12 @@
   defmodule MyAppWeb.RoomChannel do
     use MyAppWeb, :channel
 
-    def join(&quot;room:lobby&quot;, _message, socket) do
+    def join("room:lobby", _message, socket) do
       {:ok, socket}
     end
 
-    def handle_in(&quot;new_msg&quot;, %{&quot;body&quot; => body}, socket) do
-      broadcast!(socket, &quot;new_msg&quot;, %{body: body})
+    def handle_in("new_msg", %{"body" => body}, socket) do
+      broadcast!(socket, "new_msg", %{body: body})
       {:noreply, socket}
     end
   end
@@ -188,7 +188,7 @@
 - **Add Channel to Endpoint**:
   ```elixir
   # lib/my_app_web/endpoint.ex
-  socket &quot;/socket&quot;, MyAppWeb.UserSocket,
+  socket "/socket", MyAppWeb.UserSocket,
     websocket: true,
     longpoll: false
   ```

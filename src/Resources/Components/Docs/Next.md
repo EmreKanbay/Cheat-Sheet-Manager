@@ -142,7 +142,7 @@
   export default function Home() {
     return (
       <div>
-        <Image src=&quot;/vercel.svg&quot; alt=&quot;Vercel Logo&quot; width={72} height={16} />
+        <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
       </div>
     );
   }

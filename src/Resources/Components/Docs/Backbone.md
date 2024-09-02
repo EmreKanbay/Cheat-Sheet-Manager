@@ -9,7 +9,7 @@
 2. **Using a CDN:**
    Add the following script tag to your HTML file:
    ```html
-   <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js&quot;></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
    ```
 
 ### Backbone.js Cheat Sheet

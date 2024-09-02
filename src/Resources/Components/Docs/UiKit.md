@@ -6,10 +6,10 @@
 
 2. **Create a New Project**:
 
-   - Open Xcode and select &quot;Create a new Xcode project.&quot;
-   - Choose a template for your project (e.g., App) and click &quot;Next.&quot;
-   - Enter your project details and click &quot;Next.&quot;
-   - Choose a location to save your project and click &quot;Create.&quot;
+   - Open Xcode and select "Create a new Xcode project."
+   - Choose a template for your project (e.g., App) and click "Next."
+   - Enter your project details and click "Next."
+   - Choose a location to save your project and click "Create."
 
 3. **Import UIKit**:
    - UIKit is automatically included in your project when you create a new iOS app in Xcode.
@@ -30,7 +30,7 @@
 
   ```swift
   let label = UILabel()
-  label.text = &quot;Hello, World!&quot;
+  label.text = "Hello, World!"
   label.textColor = .black
   ```
 
@@ -38,13 +38,13 @@
 
   ```swift
   let button = UIButton(type: .system)
-  button.setTitle(&quot;Tap me&quot;, for: .normal)
+  button.setTitle("Tap me", for: .normal)
   button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
   ```
 
 - **UIImageView**: Displays an image.
   ```swift
-  let imageView = UIImageView(image: UIImage(named: &quot;example.png&quot;))
+  let imageView = UIImageView(image: UIImage(named: "example.png"))
   ```
 
 #### Layout

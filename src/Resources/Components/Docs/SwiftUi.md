@@ -11,11 +11,11 @@
 
 3. **Create a New SwiftUI Project**:
    - Open Xcode.
-   - Select &quot;Create a new Xcode project.&quot;
-   - Choose &quot;App&quot; under the iOS tab and click &quot;Next.&quot;
+   - Select "Create a new Xcode project."
+   - Choose "App" under the iOS tab and click "Next."
    - Enter your project details (e.g., Product Name, Team, Organization Identifier).
-   - Ensure &quot;Swift&quot; is selected as the language and &quot;SwiftUI&quot; is selected as the User Interface.
-   - Click &quot;Next&quot; and choose a location to save your project.
+   - Ensure "Swift" is selected as the language and "SwiftUI" is selected as the User Interface.
+   - Click "Next" and choose a location to save your project.
 
 ### **SwiftUI Cheat Sheet**
 
@@ -35,7 +35,7 @@ struct MyApp: App {
 
 struct ContentView: View {
     var body: some View {
-        Text(&quot;Hello, World!&quot;)
+        Text("Hello, World!")
             .padding()
     }
 }
@@ -46,31 +46,31 @@ struct ContentView: View {
 - **Text**: Displays a string of text.
 
   ```swift
-  Text(&quot;Hello, SwiftUI!&quot;)
+  Text("Hello, SwiftUI!")
   ```
 
 - **Image**: Displays an image.
 
   ```swift
-  Image(systemName: &quot;star.fill&quot;)
+  Image(systemName: "star.fill")
   ```
 
 - **Button**: A tappable button.
 
   ```swift
   Button(action: {
-      print(&quot;Button tapped!&quot;)
+      print("Button tapped!")
   }) {
-      Text(&quot;Tap me!&quot;)
+      Text("Tap me!")
   }
   ```
 
 - **TextField**: A text input field.
 
   ```swift
-  @State private var name: String = &quot;&quot;
+  @State private var name: String = ""
 
-  TextField(&quot;Enter your name&quot;, text: $name)
+  TextField("Enter your name", text: $name)
   ```
 
 #### **Layout Containers**
@@ -79,8 +79,8 @@ struct ContentView: View {
 
   ```swift
   VStack {
-      Text(&quot;Top&quot;)
-      Text(&quot;Bottom&quot;)
+      Text("Top")
+      Text("Bottom")
   }
   ```
 
@@ -88,16 +88,16 @@ struct ContentView: View {
 
   ```swift
   HStack {
-      Text(&quot;Left&quot;)
-      Text(&quot;Right&quot;)
+      Text("Left")
+      Text("Right")
   }
   ```
 
 - **ZStack**: Overlays views on top of each other.
   ```swift
   ZStack {
-      Text(&quot;Back&quot;)
-      Text(&quot;Front&quot;)
+      Text("Back")
+      Text("Front")
   }
   ```
 
@@ -106,27 +106,27 @@ struct ContentView: View {
 - **Padding**: Adds padding around a view.
 
   ```swift
-  Text(&quot;Hello, SwiftUI!&quot;)
+  Text("Hello, SwiftUI!")
       .padding()
   ```
 
 - **ForegroundColor**: Changes the color of text or images.
 
   ```swift
-  Text(&quot;Hello, SwiftUI!&quot;)
+  Text("Hello, SwiftUI!")
       .foregroundColor(.blue)
   ```
 
 - **Background**: Adds a background color or view.
 
   ```swift
-  Text(&quot;Hello, SwiftUI!&quot;)
+  Text("Hello, SwiftUI!")
       .background(Color.yellow)
   ```
 
 - **CornerRadius**: Rounds the corners of a view.
   ```swift
-  Image(systemName: &quot;star.fill&quot;)
+  Image(systemName: "star.fill")
       .cornerRadius(10)
   ```
 
@@ -138,7 +138,7 @@ struct ContentView: View {
   @State private var isOn: Bool = false
 
   Toggle(isOn: $isOn) {
-      Text(&quot;Toggle switch&quot;)
+      Text("Toggle switch")
   }
   ```
 
@@ -146,7 +146,7 @@ struct ContentView: View {
 
   ```swift
   struct ParentView: View {
-      @State private var name: String = &quot;&quot;
+      @State private var name: String = ""
 
       var body: some View {
           ChildView(name: $name)
@@ -157,7 +157,7 @@ struct ContentView: View {
       @Binding var name: String
 
       var body: some View {
-          TextField(&quot;Enter your name&quot;, text: $name)
+          TextField("Enter your name", text: $name)
       }
   }
   ```
@@ -168,14 +168,14 @@ struct ContentView: View {
 
   ```swift
   NavigationView {
-      Text(&quot;Home&quot;)
-          .navigationTitle(&quot;Home&quot;)
+      Text("Home")
+          .navigationTitle("Home")
   }
   ```
 
 - **NavigationLink**: A link to navigate to another view.
   ```swift
   NavigationLink(destination: DetailView()) {
-      Text(&quot;Go to Detail&quot;)
+      Text("Go to Detail")
   }
   ```

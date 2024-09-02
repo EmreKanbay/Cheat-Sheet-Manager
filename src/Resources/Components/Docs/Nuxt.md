@@ -180,7 +180,7 @@
   ```vue
   <template>
     <div>
-      <button @click=&quot;$store.commit('increment')&quot;>Increment</button>
+      <button @click="$store.commit('increment')">Increment</button>
       <p>{{ $store.state.counter }}</p>
     </div>
   </template>

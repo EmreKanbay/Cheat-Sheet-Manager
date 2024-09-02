@@ -160,8 +160,8 @@
   <!-- app/views/articles/_form.html.erb -->
   <%= form_with(model: @article, local: true) do |form| %>
     <% if @article.errors.any? %>
-      <div id=&quot;error_explanation&quot;>
-        <h2><%= pluralize(@article.errors.count, &quot;error&quot;) %> prohibited this article from being saved:</h2>
+      <div id="error_explanation">
+        <h2><%= pluralize(@article.errors.count, "error") %> prohibited this article from being saved:</h2>
         <ul>
           <% @article.errors.full_messages.each do |message| %>
             <li><%= message %></li>
@@ -170,17 +170,17 @@
       </div>
     <% end %>
 
-    <div class=&quot;field&quot;>
+    <div class="field">
       <%= form.label :title %>
       <%= form.text_field :title %>
     </div>
 
-    <div class=&quot;field&quot;>
+    <div class="field">
       <%= form.label :body %>
       <%= form.text_area :body %>
     </div>
 
-    <div class=&quot;actions&quot;>
+    <div class="actions">
       <%= form.submit %>
     </div>
   <% end %>

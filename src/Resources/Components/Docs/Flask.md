@@ -119,7 +119,7 @@
           username = request.form['username']
           return f'Logged in as {username}'
       return '''
-          <form method=&quot;post&quot;>
+          <form method="post">
               <p><input type=text name=username>
               <p><input type=submit value=Login>
           </form>

@@ -10,14 +10,14 @@
 
    ```html
    <head>
-     <script src=&quot;path/to/jquery-3.7.1.min.js&quot;></script>
+     <script src="path/to/jquery-3.7.1.min.js"></script>
    </head>
    ```
 
 3. **Alternatively, use a CDN**:
    ```html
    <head>
-     <script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js&quot;></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
    </head>
    ```
 
@@ -37,15 +37,15 @@
 - **Basic Selectors**:
 
   ```javascript
-  $(&quot;p&quot;)          // Selects all <p> elements
-  $(&quot;.class&quot;)     // Selects all elements with class=&quot;class&quot;
-  $(&quot;#id&quot;)        // Selects the element with id=&quot;id&quot;
+  $("p")          // Selects all <p> elements
+  $(".class")     // Selects all elements with class="class"
+  $("#id")        // Selects the element with id="id"
   ```
 
 - **Attribute Selectors**:
   ```javascript
-  $(&quot;[href]&quot;)                     // Selects all elements with an href attribute
-  $(&quot;a[target='_blank']&quot;)         // Selects all <a> elements with target=&quot;_blank&quot;
+  $("[href]")                     // Selects all elements with an href attribute
+  $("a[target='_blank']")         // Selects all <a> elements with target="_blank"
   ```
 
 #### Events
@@ -53,11 +53,11 @@
 - **Common Events**:
 
   ```javascript
-  $(&quot;button&quot;).click(function() {
-    alert(&quot;Button clicked!&quot;);
+  $("button").click(function() {
+    alert("Button clicked!");
   });
 
-  $(&quot;input&quot;).on(&quot;input&quot;, function() {
+  $("input").on("input", function() {
     console.log($(this).val());
   });
   ```
@@ -67,15 +67,15 @@
 - **Show/Hide**:
 
   ```javascript
-  $(&quot;#element&quot;).hide();           // Hides the element
-  $(&quot;#element&quot;).show();           // Shows the element
-  $(&quot;#element&quot;).toggle();         // Toggles visibility
+  $("#element").hide();           // Hides the element
+  $("#element").show();           // Shows the element
+  $("#element").toggle();         // Toggles visibility
   ```
 
 - **Fade**:
   ```javascript
-  $(&quot;#element&quot;).fadeIn();         // Fades in the element
-  $(&quot;#element&quot;).fadeOut();        // Fades out the element
+  $("#element").fadeIn();         // Fades in the element
+  $("#element").fadeOut();        // Fades out the element
   ```
 
 #### DOM Manipulation
@@ -83,15 +83,15 @@
 - **Content Manipulation**:
 
   ```javascript
-  $(&quot;#element&quot;).text(&quot;New text&quot;); // Sets text content
-  $(&quot;#element&quot;).html(&quot;<b>Bold</b>&quot;); // Sets HTML content
+  $("#element").text("New text"); // Sets text content
+  $("#element").html("<b>Bold</b>"); // Sets HTML content
   ```
 
 - **Class Manipulation**:
   ```javascript
-  $(&quot;#element&quot;).addClass(&quot;newClass&quot;); // Adds a class
-  $(&quot;#element&quot;).removeClass(&quot;oldClass&quot;); // Removes a class
-  $(&quot;#element&quot;).toggleClass(&quot;active&quot;); // Toggles a class
+  $("#element").addClass("newClass"); // Adds a class
+  $("#element").removeClass("oldClass"); // Removes a class
+  $("#element").toggleClass("active"); // Toggles a class
   ```
 
 #### AJAX
@@ -99,8 +99,8 @@
 - **Basic AJAX Request**:
   ```javascript
   $.ajax({
-    url: &quot;https://api.example.com/data&quot;,
-    method: &quot;GET&quot;,
+    url: "https://api.example.com/data",
+    method: "GET",
     success: function(data) {
       console.log(data);
     },
@@ -115,7 +115,7 @@
 - **Each**: Iterate over a jQuery collection.
 
   ```javascript
-  $(&quot;li&quot;).each(function(index, element) {
+  $("li").each(function(index, element) {
     console.log(index, $(element).text());
   });
   ```
@@ -124,6 +124,6 @@
   ```javascript
   var jq = $.noConflict();
   jq(document).ready(function() {
-    jq(&quot;#element&quot;).text(&quot;Hello, jQuery!&quot;);
+    jq("#element").text("Hello, jQuery!");
   });
   ```

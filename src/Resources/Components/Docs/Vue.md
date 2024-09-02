@@ -47,7 +47,7 @@ h1 {
 <template>
 	<div>
 		<p>{{ count }} doubled is {{ doubled }}</p>
-		<button @click="&quot;increment&quot;;">Increment</button>
+		<button @click=""increment";">Increment</button>
 	</div>
 </template>
 
@@ -113,7 +113,7 @@ export default {
 
 ```vue
 <template>
-	<button @click="&quot;handleClick&quot;;">Click me</button>
+	<button @click=""handleClick";">Click me</button>
 </template>
 
 <script>
@@ -177,7 +177,7 @@ export default {
 		<li
 			v-for='"item'
 			in
-			items&quot;
+			items"
 			:key="'item'">
 			{{ item }}
 		</li>
@@ -242,7 +242,7 @@ createApp(App).use(store).mount('#app');
 // App.vue
 <template>
   <div>
-    <button @click=&quot;increment&quot;>Increment</button>
+    <button @click="increment">Increment</button>
     <p>{{ count }}</p>
   </div>
 </template>

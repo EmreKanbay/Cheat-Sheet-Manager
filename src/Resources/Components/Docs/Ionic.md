@@ -45,7 +45,7 @@ To get started with Ionic, you can use the following commands:
   import { Route } from 'react-router-dom';
   const App = () => (
     <IonReactRouter>
-      <Route path=&quot;/home&quot; component={Home} />
+      <Route path="/home" component={Home} />
     </IonReactRouter>
   );
   ```

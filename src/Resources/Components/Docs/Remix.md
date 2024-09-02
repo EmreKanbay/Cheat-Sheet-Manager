@@ -74,7 +74,7 @@
 
   ```jsx
   // app/routes/index.jsx
-  import { json, useLoaderData } from &quot;remix&quot;;
+  import { json, useLoaderData } from "remix";
 
   export let loader = async () => {
     let data = await fetchSomeData();
@@ -93,20 +93,20 @@
 
   ```jsx
   // app/routes/contact.jsx
-  import { redirect } from &quot;remix&quot;;
+  import { redirect } from "remix";
 
   export let action = async ({ request }) => {
     let formData = await request.formData();
-    let name = formData.get(&quot;name&quot;);
+    let name = formData.get("name");
     // Process form data
-    return redirect(&quot;/thank-you&quot;);
+    return redirect("/thank-you");
   };
 
   export default function Contact() {
     return (
-      <form method=&quot;post&quot;>
-        <input type=&quot;text&quot; name=&quot;name&quot; />
-        <button type=&quot;submit&quot;>Submit</button>
+      <form method="post">
+        <input type="text" name="name" />
+        <button type="submit">Submit</button>
       </form>
     );
   }
@@ -118,10 +118,10 @@
 
   ```jsx
   // app/routes/index.jsx
-  import styles from &quot;./index.css&quot;;
+  import styles from "./index.css";
 
   export function links() {
-    return [{ rel: &quot;stylesheet&quot;, href: styles }];
+    return [{ rel: "stylesheet", href: styles }];
   }
 
   export default function Index() {

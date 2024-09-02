@@ -17,8 +17,8 @@
    - Add the path to the Android SDK to your system's environment variables.
    - For Windows:
      ```bash
-     setx ANDROID_HOME &quot;C:\Users\<Your-Username>\AppData\Local\Android\Sdk&quot;
-     setx PATH &quot;%PATH%;%ANDROID_HOME%\platform-tools&quot;
+     setx ANDROID_HOME "C:\Users\<Your-Username>\AppData\Local\Android\Sdk"
+     setx PATH "%PATH%;%ANDROID_HOME%\platform-tools"
      ```
    - For macOS/Linux:
      ```bash
@@ -104,11 +104,11 @@
   android {
       compileSdkVersion 30
       defaultConfig {
-          applicationId &quot;com.example.yourapp&quot;
+          applicationId "com.example.yourapp"
           minSdkVersion 21
           targetSdkVersion 30
           versionCode 1
-          versionName &quot;1.0&quot;
+          versionName "1.0"
       }
   }
 
@@ -123,20 +123,20 @@
 - **AndroidManifest.xml**:
 
   ```xml
-  <manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-      package=&quot;com.example.yourapp&quot;>
+  <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.example.yourapp">
 
       <application
-          android:allowBackup=&quot;true&quot;
-          android:icon=&quot;@mipmap/ic_launcher&quot;
-          android:label=&quot;@string/app_name&quot;
-          android:roundIcon=&quot;@mipmap/ic_launcher_round&quot;
-          android:supportsRtl=&quot;true&quot;
-          android:theme=&quot;@style/AppTheme&quot;>
-          <activity android:name=&quot;.MainActivity&quot;>
+          android:allowBackup="true"
+          android:icon="@mipmap/ic_launcher"
+          android:label="@string/app_name"
+          android:roundIcon="@mipmap/ic_launcher_round"
+          android:supportsRtl="true"
+          android:theme="@style/AppTheme">
+          <activity android:name=".MainActivity">
               <intent-filter>
-                  <action android:name=&quot;android.intent.action.MAIN&quot; />
-                  <category android:name=&quot;android.intent.category.LAUNCHER&quot; />
+                  <action android:name="android.intent.action.MAIN" />
+                  <category android:name="android.intent.category.LAUNCHER" />
               </intent-filter>
           </activity>
       </application>
@@ -147,16 +147,16 @@
 - **activity_main.xml**:
 
   ```xml
-  <RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-      xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-      android:layout_width=&quot;match_parent&quot;
-      android:layout_height=&quot;match_parent&quot;
-      tools:context=&quot;.MainActivity&quot;>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:context=".MainActivity">
 
       <TextView
-          android:layout_width=&quot;wrap_content&quot;
-          android:layout_height=&quot;wrap_content&quot;
-          android:text=&quot;Hello, World!&quot; />
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Hello, World!" />
 
   </RelativeLayout>
   ```
