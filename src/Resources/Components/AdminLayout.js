@@ -759,6 +759,72 @@ const changeCustom = (el) => {
 		})
 
 
+	document.querySelector("#edit-custom-cheat").addEventListener("click", async ()=> {
+		
+  
+		if( document.querySelector("#add-new-edit-element-container").style.display == "none") document.querySelector("#add-new-edit-element-container").style.display = "block"
+else document.querySelector("#add-new-edit-element-container").style.display = "none"
+
+
+
+
+ 		})
+ 
+		document.querySelector("#edit-new-cheat-form").addEventListener("submit", async (e)=> {
+		e.preventDefault()
+
+
+
+
+		const formData = new FormData()
+
+			document.querySelector(".MGqm9l-loading").classList.add("active");
+
+
+		    const rendered_res = await fetch("https://api.github.com/markdown", {
+    
+				headers:{accept:"application/vnd.github+json"},
+				method: "POST",
+				body: JSON.stringify(
+				
+				{text: document.querySelector("#edit-new-cheat-markdown").value,
+				mode:"gfm"
+			}
+				)
+				
+    
+    })
+
+		formData.append("id", document.querySelector("#id-of-custom-cheat").innerHTML)
+		formData.append("raw", document.querySelector("#edit-new-cheat-markdown").value)
+		formData.append("title", document.querySelector("#edit-new-cheat-name").value)
+		formData.append("rendered", await rendered_res.text())
+
+
+		const res = await fetch("/database/cheat-sheet", {
+		
+		method:"PATCH",
+		body: formData
+		
+		
+		})
+
+	document.querySelector(".MGqm9l-loading").classList.remove("active");
+
+
+		if( res.ok){
+		await ChangeContent('PageCustom')
+		
+		}
+		else {
+		document.querySelector("#error-box-of-edit-custom").innerHTML = await res.text()
+		
+		}
+ 
+
+
+
+ 		})
 
 
 

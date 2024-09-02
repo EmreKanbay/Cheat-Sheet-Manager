@@ -132,16 +132,53 @@ module.exports = {
                     <div class="list-container-for-element-text">
                         <p>${t.title}</p>
                         <div style="display:none">
+                        <button id="edit-custom-cheat">Toggle Edit</button>
                         <button id="delete-custom-cheat">Delete</button>
 
-
                         <div id="error-box-for-deletion-on-cheat"></div>
-                        <div id="id-of-custom-cheat" style="display:none">${t.id}</div>
 
+ 
+                <div style="display:none" id="add-new-edit-element-container">
+
+
+                    <form id="edit-new-cheat-form">
+                    <h4>Name</h4>
+                    <input value="${t.title}"  id="edit-new-cheat-name" type="text" />
+
+
+
+                    <h4>Markdown</h4>
+
+                    <textarea id="edit-new-cheat-markdown">${t.raw}</textarea>
+                    
+
+                    <input type="submit" value="Save Edit" />
+
+                  <div id="error-box-of-edit-custom"></div>
+
+                    
+                    </form>
+                    
+                </div>
+
+
+
+
+
+                        <div id="id-of-custom-cheat" style="display:none">${t.id}</div>
+                        <style>
+                        #edit-new-cheat-markdown{
+                            width:100%;
+                            resize: vertical;
+                            height: 400px;
+                            
+                            }
+    </style>
              
                         ${t.rendered}
                         
                         </div>
+ 
                     </div>
                 </div>
                 `;

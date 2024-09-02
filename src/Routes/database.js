@@ -264,8 +264,7 @@ database.route("/cheat-sheet")
  
 	try{
 
-		console.log(req.body.raw)
- 		var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+  		var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
 
 		data = await JSON.parse(data);
 	
@@ -274,7 +273,7 @@ database.route("/cheat-sheet")
 		await client.connect();
 	
 		const record = await client.query(
-			`INSERT INTO "ossk_contents" (title, rendered) VALUES ('${req.body.title}','${req.body.rendered}')`,
+			`INSERT INTO "ossk_contents" (title, rendered, raw) VALUES ('${req.body.title}','${req.body.rendered}','${req.body.raw}')`,
 		);
 	
 		res.send();
@@ -293,8 +292,41 @@ database.route("/cheat-sheet")
 	
 })
 
-.delete()
-.patch()
+.patch(Index.upload.none(), async (req, res) => {
+
+ 
+
+ 
+try{
+
+	var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+
+  data = await JSON.parse(data);
+
+  const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
+
+  await client.connect();
+
+  const record = await client.query(
+	  `UPDATE "ossk_contents" SET title = '${req.body.title}', raw = '${req.body.raw}', rendered = '${req.body.rendered}' WHERE id = '${req.body.id}'`,
+  );
+
+  res.send();
+
+  client.end()
+
+
+}catch(e){
+
+
+  console.log(e)
+
+  res.status(500).send(await Components.public.ErrorBox.html({ message: "Failed to edit cheat sheet" }));
+}
+
+ 
+ 
+})
 .delete(Index.upload.none(),async (req, res) => {
 
 

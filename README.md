@@ -14,6 +14,8 @@ Dashboard design is from this codepen -> https://codepen.io/jaca90/pen/vZJZMx
 
 - This app is a single UI for **cheat sheets** of most used **frameworks** and most used **tools** for Open Source Softwares
 - You can find **boilerplate codes** and **most used commands** for the tools you use often like **git**, **Markdown Sytax**, **Docker** and so on
+- And best thing is, you can create your own cheat sheets from directly on frontend!
+
 
 ### What is included (For now)
 
@@ -73,9 +75,9 @@ Warning: **do not use nodemon**, it will throw network error.
 
 ### Missing Features
 
-- CRUD must be included, so user can modify content only on frontend without hassle.
+[X] CRUD must be included, so user can modify content only on frontend without hassle. (DONE)
 
-- Vulnerable to SQL injection, request must be sanitized, parameterized.
+[] Vulnerable to SQL injection, request must be sanitized, parameterized.
 
 #### Tech Stack Used(For Contributers):
 
