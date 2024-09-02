@@ -56,6 +56,7 @@ const Express = require("./Components/Docs/Express");
 const Phoneix = require("./Components/Docs/Phoneix");
 const DialogIntializeDB = require("./Components/DialogIntializeDB");
 const DialogAlert = require("./Components/DialogAlert");
+const PageCustom = require("./Components/PageCustom");
 
 module.exports = {
 	docs: {
@@ -121,5 +122,6 @@ module.exports = {
 		PageHelp,
 		PageProjects,
 		PageSettings,
+		PageCustom
 	},
 };

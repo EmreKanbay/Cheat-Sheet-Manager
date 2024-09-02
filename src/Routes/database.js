@@ -18,6 +18,12 @@ database.post("/initialize", Index.express.json(), async (req, res) => {
 			.connect()
 			.then(async e => {
 				try {
+
+					await client.query(`DROP TABLE IF EXISTS "ossk_contents"`);
+					await client.query(
+						`CREATE TABLE IF NOT EXISTS "ossk_contents" (id serial primary key, title text, rendered text, raw text) `,
+					);
+
 					await client.query(`DROP TABLE IF EXISTS "ossk_users"`);
 					await client.query(
 						`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `,
@@ -53,6 +59,11 @@ database.post("/connect", Index.express.json(), async (req, res) => {
 			.connect()
 			.then(async e => {
 				try {
+					await client.query(`DROP TABLE IF EXISTS "ossk_contents"`);
+					await client.query(
+						`CREATE TABLE IF NOT EXISTS "ossk_contents" (id serial primary key, title text, rendered text, raw text) `,
+					);
+
 					await client.query(`DROP TABLE IF EXISTS "ossk_users"`);
 					await client.query(
 						`CREATE TABLE IF NOT EXISTS "ossk_users" (id serial primary key, login_name text, password_hash text) `,
@@ -243,7 +254,85 @@ console.log(req.body.newPassword)
 	})
 	
 
+database.route("/cheat-sheet")
 
+
+.put(Index.upload.none(),async (req, res) => {
+
+
+
+ 
+	try{
+
+		console.log(req.body.raw)
+ 		var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+
+		data = await JSON.parse(data);
+	
+		const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
+	
+		await client.connect();
+	
+		const record = await client.query(
+			`INSERT INTO "ossk_contents" (title, rendered) VALUES ('${req.body.title}','${req.body.rendered}')`,
+		);
+	
+		res.send();
+
+		client.end()
+	
+
+	}catch(e){
+
+ 
+		console.log(e)
+
+		res.status(500).send(await Components.public.ErrorBox.html({ message: "Failed to add new cheat sheet" }));
+	}
+
+	
+})
+
+.delete()
+.patch()
+.delete(Index.upload.none(),async (req, res) => {
+
+
+
+	try{
+
+ 		var data = await fs.readFileSync(path.join(Index.__rootDir, "..", "env.json"), { encoding: "utf8", flag: "r" });
+
+	   data = await JSON.parse(data);
+   
+	   const client = await new Index.Client({ connectionString: data.PG_CONNECTION_STRING });
+   
+	   await client.connect();
+   
+	   const record = await client.query(
+		   `DELETE FROM "ossk_contents" WHERE id ='${req.body.id}'`,
+	   );
+   
+	   res.send();
+
+	   client.end()
+   
+
+   }catch(e){
+
+
+	   console.log(e)
+
+	   res.status(500).send(await Components.public.ErrorBox.html({ message: "Failed to remove" }));
+   }
+
+
+
+	console.log(req.body)
+
+
+	res.send()
+})
 
 
 

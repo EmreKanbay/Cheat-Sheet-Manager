@@ -698,7 +698,8 @@ const ChangeContent = (t, cas) => {
 											eaa.innerHTML = e.js;
 											document.querySelector(".page-content").prepend(eaa);
 
-										cas()
+										if(typeof cas != "undefined") cas()
+										else return
 
 										});
 							} catch {}
@@ -706,7 +707,65 @@ const ChangeContent = (t, cas) => {
 	}
 
 
+const changeCustom = (el) => {
 
+	document.querySelector(".page-content").classList.add("markdown-body")
+
+	document.querySelector(".page-title").innerHTML =  el.children[1].children[0].innerHTML
+
+	
+	
+	document.querySelector(".page-content").innerHTML = el.children[1].children[1].innerHTML
+	
+
+	document.querySelector("#delete-custom-cheat").addEventListener("click", async ()=> {
+		
+ 
+ 
+		document.querySelector(".MGqm9l-loading").classList.add("active")
+
+		const formData = new FormData()
+
+		formData.append("id", document.querySelector("#id-of-custom-cheat").innerHTML)
+
+		const res = await fetch("/database/cheat-sheet", {
+		
+		method:"DELETE",
+		body: formData
+		
+		})
+
+		if(res.ok){
+		   await ChangeContent('PageCustom')
+
+		}
+		else{
+		
+
+
+		document.querySelector("#error-box-for-deletion-on-cheat").innerHTML = await res.text()
+				document.querySelector(".MGqm9l-loading").classList.remove("active")
+
+	
+		}
+
+
+
+
+
+
+
+
+		})
+
+
+
+
+
+
+
+
+	}
 
 
 
