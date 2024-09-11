@@ -1,4 +1,4 @@
-# Ultimate Open Source Starter Kit | for Neon
+# Cheat Sheet Manager
 
 > Special thanks to Zayd al-Muqaddim al-Qamar al-‘Aarabi for all his contributions.
 
@@ -38,11 +38,6 @@ Laravel, Django, .Net, Ruby on Rails, Spring, Flask, Express JS, Phoneix
 ## Create your own cheat sheets
 
 https://github.com/user-attachments/assets/7f9a8c58-295c-4b9d-9263-5954e93fe9ac
-
-
-## How to initialize database(With Neon, this process takes less than 3 minutes)
-
-https://github.com/user-attachments/assets/c1e4bbee-c1e3-4bdd-87fc-94421b58f19d
 
 ## How to Start:
 
